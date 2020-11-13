@@ -1,74 +1,67 @@
 <%- layout('/layouts/boilerplate')%>
-<div class="mcontent col-md-10 col-lg-10 col-xl-10 text-center bg-white row justify-content-center align-content-center m-0">
-    <div class="col-md-12 col-lg-11 col-xl-10 ">
-        
-        <h1 class="text-center py-5">
-            TV Search API
-        </h1>
-        <div id="spinner" class="spinner-border" role="status" hidden>
-            <span class="sr-only">Loading...</span>
+<div class="col-md-12 col-lg-11 col-xl-10 row justify-content-center">
+    <h1 class="pt-4">TV show search</h1>
+    <h3><small class="text-secondary font-weight-light">Powered by TVMaze's API</small></h3>
+    <hr class="w-75">
+    <div id="spinner" class="spinner-border" role="status" hidden>
+        <span class="sr-only">Loading...</span>
+    </div>
+    <form id="showForm" class="row flex-column" action="/shows" method="POST">
+        <div class="form-group col-12 pb-4">
+            <label for="showBox" name="msgboxl">Search a show!!</label>
+            <input class="form-control msgbox" id="showBox" type="text" name="search" placeholder="Type a show here...">
         </div>
-        <form id="showForm" class="row flex-column" action="#nowhere">
-            <div class="form-group col-12 pb-4">
-                <label for="msgbox" name="msgboxl">Search a show</label>
-                <input type="text" class="form-control msgbox" name="msgbox" id="showBox" placeholder="Type a show here...">
-            </div>
-            <div class="row form-group col-6 align-self-center mb-5">
-                <button class="btn btn-success align-self-end col-12">Search</button>
-            </div>
-        </form>
-    </div>
-    <div id="searchCont" class="row justify-content-center">
-        <%
-        try {
-            if (shows) {
-                console.log("Shows is defined")
-                for (let result of shows) {
-                    console.log("Adding show: "+result.show.name)
-                %> 
-                <div class="border col-12 text-left mb-2">
-                    <div class="col-3 m-0 p-0 row justify-content-center align-items-center text-center">
-                        <a href="<%=result.show.url%>">
-                            <%if (result.show.image) {%>
-                                <img src="<%=result.show.image.medium%>" class="border rounded my-2">
-                            <%} else {%>
-                                <h2 class="border rounded bg-light">NO IMAGE</h2>
-                            <%};%>
-                        </a>
-                    </div>
-                    <div class="col-12">
-                        <ul class="list-group col-9 m-0 p-2">
-                            <%if (result.show.name) {%>
-                            <li class="list-group-item my-1">
-                                <h2>Name</h2>
-                                <%=result.show.name%>
-                            </li>
-                            <%};if (result.show.network) {%>
-                            <li class="list-group-item my-1">
-                                <h2>Network</h2>
-                                <%=result.show.network%>
-                            </li>
-                            <%};if (result.show.rating.average) {%>
-                            <li class="list-group-item my-1">
-                                <h2>Rating</h2>
-                                <%=result.show.rating.average%>
-                            </li>
-                            <%};if (result.show.summary) {%>
-                            <li class="list-group-item my-1">
-                                <h2>Summary</h2>
-                                <%=result.show.summary%>
-                            </li>
-                            <%};%>
-                        </ul>
-                    </div>
-                </div>
-                <%}}
-            } catch {};%> 
-    </div>
-    <nav class="col-12" aria-label="breadcrumb">
-        <ol class="breadcrumb col-12 justify-content-center">
-            <li class="breadcrumb-item"><a href="/home">Home</a></li>
-            <li class="breadcrumb-item active"  aria-current="page">TV Search</li>
-        </ol>
-    </nav>
+        <div class="row form-group col-6 align-self-center mb-5">
+            <button class="btn btn-success align-self-end col-12">Search</button>
+        </div>
+    </form>
 </div>
+<div id="searchCont" class="row justify-content-center">
+    <%
+        console.log(typeof shows)
+        if (typeof shows !== 'undefined') {
+            console.log("Shows is defined")
+            console.dir(shows)
+            for (let result of shows) {
+                console.log("Adding show: "+result.show.name)
+            %> 
+            <div class="col-10 row justify-content-center align-items-center m-0 p-1 mb-3 border rounded bg-dark">
+                <a class="col-10 col-lg-4 col-xl-3 m-0 p-2 py-lg-0 pr-0 pr-lg-2 pr-md-1 row justify-content-center align-items-center text-center" href="<%=result.show.url%>">
+                    <%if (result.show.image) {%>
+                        <img src="<%=result.show.image.medium%>" class="border rounded my-2">
+                    <%} else {%>
+                        <h2 class="border rounded bg-light">NO IMAGE</h2>
+                    <%};%>
+                </a>
+                <ul class="list-group col-12 col-lg-8 col-xl-9 col-sm-12 m-0 p-0 px-0 px-lg-2 px-md-0 px-sm-0 bg-secondary">
+                    <%if (result.show.name) {%>
+                    <li class="list-group-item my-1">
+                        <h2>Name</h2>
+                        <%=result.show.name%>
+                    </li>
+                    <%};if (result.show.network) {%>
+                    <li class="list-group-item my-1">
+                        <h2>Network</h2>
+                        <%=result.show.network%>
+                    </li>
+                    <%};if (result.show.rating.average) {%>
+                    <li class="list-group-item my-1">
+                        <h2>Rating</h2>
+                        <%=result.show.rating.average%>
+                    </li>
+                    <%};if (result.show.summary) {%>
+                    <li class="list-group-item my-1">
+                        <h2>Summary</h2>
+                        <%=result.show.summary%>
+                    </li>
+                    <%};%>
+                </ul>
+            </div>
+            <%}} %> 
+</div>
+<nav class="col-12" aria-label="breadcrumb">
+    <ol class="breadcrumb col-12 justify-content-center">
+        <li class="breadcrumb-item"><a href="/home">Home</a></li>
+        <li class="breadcrumb-item active"  aria-current="page">TV Search</li>
+    </ol>
+</nav>

@@ -58,6 +58,44 @@ a {
     };
 }
 
+.salert {
+    background-color: rgba(150,215,110,0.8);
+    position: fixed;
+    margin-left: 0px;
+    top: 10%;
+    width: 80%;
+    z-index: 100;
+    max-width: 1092px;
+}
+.dalert {
+    background-color: rgba(150,215,110,0.8);
+    position: fixed;
+    margin-left: 0px;
+    top: 10%;
+    width: 80%;
+    z-index: 100;
+    max-width: 1092px;
+}
+
+#overMessages {
+    position: fixed;
+    margin-left: 20%;
+    width: 60%;
+    z-index: 100;
+}
+#inner-messageR {
+    margin: 0 auto;
+    background-color: rgba(200,100,100,0.9);
+}
+#inner-messageB {
+    margin: 0 auto;
+    background-color: rgba(144, 220, 255, 0.685);
+}
+#inner-messageG {
+    margin: 0 auto;
+    background-color: rgba(0, 255, 98, 0.5);
+}
+
 /*
 .pImg {
     max-width: 90px;
@@ -133,25 +171,7 @@ h1,h2,h3 {
 .media-container {
     display: flex;
     height: 500px;
-}
-
-#overMessages {
-    position: fixed;
-    margin-left: 20%;
-    width: 60%;
-    z-index: 100;
-}
-#inner-messageR {
-    margin: 0 auto;
-    background-color: rgba(200,100,100,0.9);
-}
-#inner-messageB {
-    margin: 0 auto;
-    background-color: rgba(144, 220, 255, 0.685);
-}
-#inner-messageG {
-    margin: 0 auto;
-    background-color: rgba(0, 255, 98, 0.5);
+    width: 1000px;
 }
 
 .navbar-brand:hover {
@@ -178,8 +198,6 @@ h1,h2,h3 {
     box-shadow: 0.5px 0.5px 3px 0.5px #000 ;
     transition: 0.1s;
 }
-
-.pContainer
 
 .psContainer p {
     font-weight: 200;

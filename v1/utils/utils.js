@@ -4,6 +4,9 @@ const hError = (e) => {cconsole.log(`#red[${e}]`)};
 const hDebug = (e) => {cconsole.log(`#cyan[${e}]`)};
 const hInfo = (e) => {cconsole.log(`#green[${e}]`)};
 
+//Models
+const { User,Group } = require('../models/users');
+
 //===========
 //Error handlers
 //===========
@@ -23,9 +26,11 @@ function wrapAsync(fn) {
 //User utils
 //===========
 function setUser (req,res,next) {
-    const userId = req.body.userId;
+    const userId = req.session.username;
     if (userId) {
-        req.user = User.findById(userId)
+        console.log("setUser for "+userId)
+        res.locals.username = req.session.username;
+        //res.locals.username = User.findById(userId)
     }
     next()
 }

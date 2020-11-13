@@ -38,13 +38,15 @@ const Post = require('../models/posts');
             console.log("No error!")
             const post = new Post(req.body.post);
             await post.save();
-            res.redirect(`/post/${post._id}`);
+            req.flash('success','Post has been created!');
+            res.redirect(`/post`);
         }
     }));
     //DELETE POST
     router.delete('/:id/delete', wrapAsync(async (req, res) => {
         const { id } = req.params;
         await Post.findByIdAndDelete(id);
+        req.flash('success','Post has been deleted!');
         res.redirect('/post');
     }));
     //EDIT POST PAGE
@@ -58,9 +60,8 @@ const Post = require('../models/posts');
     //EDIT POST ACTION
     router.patch('/:id/edit', wrapAsync(async (req, res) => {
         const { id } = req.params;
-        const foundPost = await Post.findById(id);
-        foundPost.updatePost(req.body.comment);
-        hDebug('Patch success');
+        await Post.findByIdAndUpdate(id, req.body, {runValidators: true});
+        req.flash('success','Post has been edited!');
         res.redirect('/post');
     }));
 //====POST COMMENTS
@@ -83,6 +84,7 @@ const Post = require('../models/posts');
             post.comments.push(comment);
             await comment.save();
             await post.save();
+            req.flash('success','Comment has been posted!');
             res.redirect(`/post/${id}`);
         }
     }));
@@ -91,6 +93,7 @@ const Post = require('../models/posts');
         const { id, cid } = req.params;
         await Post.findByIdAndUpdate(id,{$pull: {comments: cid}});
         await Comment.findByIdAndDelete(cid);
+        req.flash('success','Comment has been deleted!');
         res.redirect(`/post/${id}`);
     }));
     //EDIT COMMENT PAGE
@@ -104,9 +107,8 @@ const Post = require('../models/posts');
     //EDIT COMMENT ACTION
     router.patch('/:id/:cid/edit', wrapAsync(async (req, res) => {
         const { id, cid } = req.params;
-
         await Comment.findByIdAndUpdate(cid, req.body, {runValidators: true});
-        hDebug('Comment patch success');
+        req.flash('success','Comment has been edited!');
         res.redirect(`/post/${id}`);
     }));
 //====USER POSTS END

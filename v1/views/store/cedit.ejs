@@ -1,31 +1,29 @@
 <%- layout('/layouts/boilerplate')%>
 
-<div class="mcontent col-md-10 col-lg-10 col-xl-10 text-center bg-white row justify-content-center align-content-center m-0">
-    <div class="col-md-12 col-lg-11 col-xl-10 mt-3">
-        
-        <h2 class="col-12 mb-3">Edit review by <%=review.username%></h2>
-        <h3>Original text</h3>
-        <div class="border p-4 m-3">
-            "<%=review.comment%>"
-        </div>
-        <form action="/store/<%=product._id%>/<%=review._id%>/edit?_method=PATCH" method="post">
-            <textarea name="comment" id="comment" class="col-12 text-center" cols="60" rows="5" ><%=review.comment%></textarea>
-            <div>
-                <button class="col-12 mb-2 btn btn-light">Edit</button>
-            </div>
-        </form>
-        <form action="/store">
-            <div>
-                <button class="col-12 mb-5 btn btn-light">Cancel</button>
-            </div>
-        </form>
+<div class="col-md-12 col-lg-11 col-xl-10 mt-3">
+    
+    <h2 class="col-12 mb-3">Edit review by <%=review.username%></h2>
+    <h3>Original text</h3>
+    <div class="border p-4 m-3">
+        "<%=review.comment%>"
     </div>
-    <nav class="col-12" aria-label="breadcrumb">
-        <ol class="breadcrumb col-12 justify-content-center">
-            <li class="breadcrumb-item"><a href="/home">Home</a></li>
-            <li class="breadcrumb-item"><a href="/store">Store</a></li>
-            <li class="breadcrumb-item"><a href="/store/<%=product._id%>">Product</a></li>
-            <li class="breadcrumb-item active"  aria-current="page">Edit review</li>
-        </ol>
-    </nav>
+    <form action="/store/<%=product._id%>/<%=review._id%>/edit?_method=PATCH" method="post">
+        <textarea name="comment" id="comment" class="col-12 text-center" cols="60" rows="5" ><%=review.comment%></textarea>
+        <div>
+            <button class="col-12 mb-2 btn btn-light">Edit</button>
+        </div>
+    </form>
+    <form action="/store">
+        <div>
+            <button class="col-12 mb-5 btn btn-light">Cancel</button>
+        </div>
+    </form>
 </div>
+<nav class="col-12" aria-label="breadcrumb">
+    <ol class="breadcrumb col-12 justify-content-center">
+        <li class="breadcrumb-item"><a href="/home">Home</a></li>
+        <li class="breadcrumb-item"><a href="/store">Store</a></li>
+        <li class="breadcrumb-item"><a href="/store/<%=product._id%>">Product</a></li>
+        <li class="breadcrumb-item active"  aria-current="page">Edit review</li>
+    </ol>
+</nav>

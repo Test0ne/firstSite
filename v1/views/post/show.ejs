@@ -1,5 +1,11 @@
 <%- layout('/layouts/boilerplate')%>
 <div class="mcontent col-md-10 col-lg-10 col-xl-10 text-center bg-white row justify-content-center align-content-center m-0">
+    <%if (data !== '' && data.length > 0) {%>
+        <div class="alert alert-success alert-dismissible fade show mt-4">
+            <%= typeof data !== 'undefined' ? data : ''%>
+            <button type="button" class="btn-close" data-dismiss="alert" aria-label="close"><span aria-hidden="true"></span></button>
+        </div>
+    <%}%>
     <div class="col-md-12 col-lg-11 col-xl-10 mt-3">
         
         <h2 class="col-12 mb-3">Post by <%=post.username%></h2>
@@ -18,7 +24,7 @@
             </div>
             <input type="hidden" name="comment[username]" value="Default">
             <div class="form-group col-6 row align-self-center mb-5">
-                <button class="btn btn-success align-self-end col-12" name="<%=post._id%>">Post comment</button>
+                <button class="btn btn-success align-self-end col-12">Post comment</button>
             </div>
         </form>
     </div>

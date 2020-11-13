@@ -22,18 +22,19 @@ const Product = require('../models/products');
         Product.find().then(products=>res.render('store', { title:"Store", products }));
     }));
     //CREATE PRODUCT PAGE
-    router.get('/new', authUser, authRole(Group.findOne({name: "Admin"})), wrapAsync(async (req, res) => {
+    router.get('/new', /** authUser, authRole(Group.findOne({name: "Admin"})), */ wrapAsync(async (req, res) => {
         res.render('store/create', {title:"Create new product"})
     }));
     //CREATE PRODUCT ACTION
-    router.put('/new', authUser, authRole(Group.findOne({name: "Admin"})), wrapAsync(async (req, res, next) => {
+    router.put('/new', /** authUser, authRole(Group.findOne({name: "Admin"})), */ wrapAsync(async (req, res, next) => {
         const vProduct = prSchema.validate(req.body);
         if (vProduct.error) {
             res.render('store/create', {title:"Create new product",error:"Error adding product! \n"+vProduct.error,data:req.body.product})
         } else {
             const product = new Product(req.body.product);
             await product.save();
-            res.redirect(`/${product._id}`)
+            req.flash('success','Product has been created!');
+            res.redirect(`/store/${product._id}`)
         }
     }));
     //VIEW PRODUCT
@@ -43,25 +44,25 @@ const Product = require('../models/products');
         res.render('store/show',{ title:"Store", product });
     }));
     //EDIT PRODUCT PAGE
-    //router.get('/:id/edit', authUser, authRole(Group.findOne({name: "Admin"})), async (req, res) => {
-    router.get('/:id/edit', authUser, authRole(Group.findOne({name: "Admin"})), wrapAsync(async (req, res) => {
+    //router.get('/:id/edit', /** authUser, authRole(Group.findOne({name: "Admin"})), */ async (req, res) => {
+    router.get('/:id/edit', /** authUser, authRole(Group.findOne({name: "Admin"})), */ wrapAsync(async (req, res) => {
         const { id } = req.params;
-        Product.findById(id).then((response)=>{
-            res.render('store/edit',{ title:"Store", response });
-        });
+        const product = await Product.findById(id);
+        res.render('store/edit',{ title:"Store", product });
     }));
     //EDIT PRODUCT ACTION
-    //router.put('/:id/edit', authUser, authRole(Group.findOne({name: "Admin"})), async (req, res) => {
-    router.put('/:id/edit', authUser, authRole(Group.findOne({name: "Admin"})), wrapAsync(async (req, res) => {
+    //router.put('/:id/edit', /** authUser, authRole(Group.findOne({name: "Admin"})), */ async (req, res) => {
+    router.put('/:id/edit', /** authUser, authRole(Group.findOne({name: "Admin"})), */ wrapAsync(async (req, res) => {
         const { id } = req.params;
         await Product.findByIdAndUpdate(id, req.body, {runValidators: true});
-        hDebug("Updated product.")
+        req.flash('success','Product has been edited!');
         res.redirect("/store/"+id);
     }));
     //DELETE PRODUCT
-    router.delete('/:id/edit', authUser, authRole(Group.findOne({name: "Admin"})), wrapAsync(async (req, res) => {
+    router.delete('/:id/edit', /** authUser, authRole(Group.findOne({name: "Admin"})), */ wrapAsync(async (req, res) => {
         const { id } = req.params;
-        await Product.findByIdAndDelete(id);
+        const product = await Product.findByIdAndDelete(id);
+        req.flash('success',`Product '${product.name}' has been deleted!`);
         res.redirect("/store");
     }));
 //====PRODUCTS END
@@ -87,6 +88,7 @@ const Product = require('../models/products');
             product.reviews.push(review);
             await review.save();
             await product.save();
+            req.flash('success','Your review has been submitted!');
             res.redirect(`/store/${id}`);
         }
     }));
@@ -103,7 +105,7 @@ const Product = require('../models/products');
         const { id, cid } = req.params;
 
         await Review.findByIdAndUpdate(cid, req.body, {runValidators: true});
-        hDebug('Review patch success');
+        req.flash('success','Review has been edited!');
         res.redirect(`/store/${id}`);
     }));
     //DELETE REVIEW
@@ -111,6 +113,7 @@ const Product = require('../models/products');
         const { id, cid } = req.params;
         await Product.findByIdAndUpdate(id,{$pull: {reviews: cid}});
         await Review.findByIdAndDelete(cid);
+        req.flash('success','Review has been deleted!');
         res.redirect(`/store/${id}`);
     }));
 //====PRODUCT STORE END

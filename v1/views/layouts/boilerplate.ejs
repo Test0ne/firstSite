@@ -13,9 +13,12 @@
     <section id="page">
         <%- include('navbar')%>
         <section class="row m-0">
-            <%- include('unav')%>
             <div id="overMessages"></div>
+            <%- include('unav')%>
+            <div class="mcontent col-md-10 col-lg-10 col-xl-10 text-center bg-white m-0 row justify-content-center">
+            <%- include('ui/alert')%>
             <%- body -%>
+            </div>
         </section>
         <footer class="row m-0 mt-1">
             <div class="container-fluid bg-white text-center pt-3 pb-2 rounded-bottom">
