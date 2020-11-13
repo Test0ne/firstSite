@@ -17,6 +17,8 @@ const productSchema = new Schema({
     },
     rating: {
         type: Number,
+        min: 1,
+        max: 5,
         required: true,
         default: 0
     },
@@ -35,8 +37,7 @@ const productSchema = new Schema({
     },
     reviews: [{
         type: Schema.Types.ObjectId,
-        ref: 'Reviews',
-        required: true
+        ref: 'reviews'
     }]
 });
 const Product = mongoose.model('Products',productSchema);

@@ -1,20 +1,15 @@
-const colorize = require('colorize');
-const cconsole = colorize.console;
-const hDebug = (e) => {cconsole.log(`#cyan[${e}]`)};
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema
 
-const userSchema = new mongoose.Schema({
-    id: String,
+const userSchema = new Schema({
     username: String,
     email: String,
-    created: Date
+    created: Date,
+    groups: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Groups',
+        required: true
+    }]
 });
 const User = mongoose.model('Users',userSchema);
-function setUser (req,res,next) {
-    const userId = req.body.userId;
-    if (userId) {
-        req.user = users.find(user => user.id === userId)
-    }
-    next()
-}
 module.exports = User;

@@ -4,29 +4,32 @@ const path = require('path');
 const methodOverride = require('method-override');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate')
+
+//Schema validations
 const Joi = require('joi')
-const { prSchema, psSchema } = require('./models/schemavs')
+const { prSchema, psSchema, commentSchema, reviewSchema } = require('./models/schemavs')
+
+//Import utils
+const { exError,hError,hDebug,hInfo,setUser,authUser,authRole,wrapAsync } = require('./utils/exError')
+
+//Routers, unused.
+//const projectRouter = require('./routes/projects');
+//app.use('/projects',projectRouter);
+
+//Models
+const User = require('./models/users');
+const Group = require('./models/groups');
+
 const Post = require('./models/posts');
 const Comment = require('./models/comments');
+
 const Product = require('./models/products');
 const Review = require('./models/reviews');
-const User = require('./models/users');
-const exError = require('./exError')
-
-//fake db -TEMP 
-const { ROLE, users } = require('./data')
 
 const morgan = require('morgan');
 const { stringify } = require('querystring');
 const { type } = require('os');
-const colorize = require('colorize');
-const cconsole = colorize.console;
-const projectRouter = require('./routes/projects');
 const { join } = require('path');
-
-const hError = (e) => {cconsole.log(`#red[${e}]`)};
-const hDebug = (e) => {cconsole.log(`#cyan[${e}]`)};
-const hInfo = (e) => {cconsole.log(`#green[${e}]`)};
 
 
 mongoose.connect('mongodb://localhost:27017/firstSite', {
@@ -36,39 +39,12 @@ mongoose.connect('mongodb://localhost:27017/firstSite', {
 }).then(()=>{hInfo("Connected to MongoDB.")})
 .catch(e => hError("Error connecting to MongoDB: "+e));
 
-function setUser (req,res,next) {
-    const userId = req.body.userId;
-    if (userId) {
-        req.user = users.find(user => user.id === userId)
-    }
-    next()
-}
-function authUser (req,res,next) {
-    if (req.user == null) {
-        return res.status(403).render('login',{title:"You must be signed in for this!", message: `Please sign in to access ${req.path}`})
-    }
-    next()
-}
-function authRole (role) {
-    return (req,res,next) => {
-        if (req.user.role !== role) {
-            next(new exError(401,"Access denied. WTF?."))
-        } else {
-            next()
-        }
-    }
-}
-function wrapAsync(fn) {
-    return function(req,res,next) {
-        fn(req,res,next).catch((e) => next(e))
-    }
-}
+
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(methodOverride('_method'))
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use(setUser)
-app.use('/projects',projectRouter);
 app.use(morgan('dev'));
 app.engine('ejs',ejsMate)
 app.set('views', path.join(__dirname, '/views'))
@@ -115,11 +91,11 @@ app.get('/about', (req, res) => {
         });
     }));
     //CREATE PRODUCT PAGE
-    app.get('/store/new', authUser, authRole(ROLE.ADMIN), wrapAsync(async (req, res) => {
+    app.get('/store/new', authUser, authRole(Group.findOne({name: "Admin"})), wrapAsync(async (req, res) => {
         res.render('store/create', {title:"Create new product"})
     }));
     //CREATE PRODUCT ACTION
-    app.put('/store/new', authUser, authRole(ROLE.ADMIN), wrapAsync(async (req, res, next) => {
+    app.put('/store/new', authUser, authRole(Group.findOne({name: "Admin"})), wrapAsync(async (req, res, next) => {
         const vProduct = prSchema.validate(req.body);
         if (vProduct.error) {
             res.render('store/create', {title:"Create new product",error:"Error adding product! \n"+vProduct.error,data:req.body.product})
@@ -132,88 +108,79 @@ app.get('/about', (req, res) => {
     //VIEW PRODUCT
     app.get('/store/:id', wrapAsync(async (req, res, next) => {
         const { id } = req.params;
-        Product.findById(id).then((r)=>{
-            if (r) {
-                res.render('store/show',{ title:"Store", response:r });
-            } else {
-                next(new exError(404,"Product not found! CODE _M"))
-            }
-        }).catch((e)=>{
-            hError("error")
-            next(new exError(404,"Product not found! CODE _C"))
-        })
+        const product = await Product.findById(id).populate('reviews');
+        res.render('store/show',{ title:"Store", product });
     }));
     //EDIT PRODUCT PAGE
-    //app.get('/store/:id/edit', authUser, authRole(ROLE.ADMIN), async (req, res) => {
-    app.get('/store/:id/edit', authUser, authRole(ROLE.ADMIN), wrapAsync(async (req, res) => {
+    //app.get('/store/:id/edit', authUser, authRole(Group.findOne({name: "Admin"})), async (req, res) => {
+    app.get('/store/:id/edit', authUser, authRole(Group.findOne({name: "Admin"})), wrapAsync(async (req, res) => {
         const { id } = req.params;
         Product.findById(id).then((response)=>{
             res.render('store/edit',{ title:"Store", response });
         });
     }));
     //EDIT PRODUCT ACTION
-    //app.put('/store/:id/edit', authUser, authRole(ROLE.ADMIN), async (req, res) => {
-    app.put('/store/:id/edit', authUser, authRole(ROLE.ADMIN), wrapAsync(async (req, res) => {
+    //app.put('/store/:id/edit', authUser, authRole(Group.findOne({name: "Admin"})), async (req, res) => {
+    app.put('/store/:id/edit', authUser, authRole(Group.findOne({name: "Admin"})), wrapAsync(async (req, res) => {
         const { id } = req.params;
-        const foundProduct = await Product.findByIdAndUpdate(id, req.body, {runValidators: true});
+        await Product.findByIdAndUpdate(id, req.body, {runValidators: true});
         hDebug("Updated product.")
         res.redirect("/store/"+id);
     }));
     //DELETE PRODUCT
-    app.delete('/store/:id/edit', authUser, authRole(ROLE.ADMIN), wrapAsync(async (req, res) => {
+    app.delete('/store/:id/edit', authUser, authRole(Group.findOne({name: "Admin"})), wrapAsync(async (req, res) => {
         const { id } = req.params;
-        const deletedProduct = await Product.findByIdAndDelete(id);
+        await Product.findByIdAndDelete(id);
         res.redirect("/store");
     }));
 //====PRODUCTS END
 
 
-
-
 //====PRODUCT REVIEWS START
     //POST REVIEW
-    app.post('/store/:id/comment', wrapAsync(async (req, res) => {
+    app.post('/store/:id/review', wrapAsync(async (req, res, next) => {
         const { id } = req.params;
-        const product = await Product.findById(id);
-        const review = new Review(req.body.review);
-        product.reviews.push(review);
-        await review.save();
-        await product.save();
-        res.redirect(`/store/${id}`);
+
+        const vReview = reviewSchema.validate(req.body);
+        console.log("REQ BODY:")
+        console.dir(req.body)
+        if (vReview.error) {
+            hError("Review failed validation! DETAILS:\n"+vReview.error)
+            const msg = vReview.error.details.map(el => el.message).join(',')
+            next(new exError(500,"Error posting review! ERROR DETAILS: "+msg))
+            //Final version should redirect to form with error msg for better user experience.
+            //res.redirect(`/store/${id}`, {title:"Create new product",error:"Error submitting review! \n"+vReview.error,data:req.body.review});
+        } else {
+            const product = await Product.findById(id);
+            const review = new Review(req.body.review);
+            product.reviews.push(review);
+            await review.save();
+            await product.save();
+            res.redirect(`/store/${id}`);
+        }
     }));
     //EDIT REVIEW PAGE
     app.get('/store/:id/:cid/edit', wrapAsync(async (req, res) => {
         const { id, cid } = req.params;
-        Product.findById(id)
-            .then((response)=>{
-                const {id, name, description, price, stock, rating, ratings, comments} = response;
-                const comment = comments.find(e => {
-                    const {id,username,comment} = e;
-                    return id == cid
-                });
-                res.render('store/cedit',{ title:"Store", comment, id, name });
-            });
+        const product = await Product.findById(id);
+        const review = await Review.findById(cid);
+        
+        res.render('store/cedit',{ title:"Edit review", product, review });
     }));
     //EDIT REVIEW ACTION
     app.patch('/store/:id/:cid/edit', wrapAsync(async (req, res) => {
         const { id, cid } = req.params;
-        const foundProduct = await Product.findById(id);
-        foundProduct.updateComment(cid,req.body.comment);
+
+        await Review.findByIdAndUpdate(cid, req.body, {runValidators: true});
         hDebug('Review patch success');
         res.redirect(`/store/${id}`);
     }));
     //DELETE REVIEW
     app.delete('/store/:id/:cid/edit' , wrapAsync(async (req, res) => {
         const { id, cid } = req.params;
-        const foundProduct = await Product.findById(id);
-        foundProduct.deleteComment(cid)
-            .then(()=>{
-                hDebug("DELETE SUCCESS")
-                res.redirect(`/store/${id}`);
-            })
-            .catch((e)=>{
-                hError("DELETE FAIL: "+e)
-            });
+        await Product.findByIdAndUpdate(id,{$pull: {reviews: cid}});
+        await Review.findByIdAndDelete(cid);
+        res.redirect(`/store/${id}`);
     }));
 //====PRODUCT STORE END
 
@@ -229,7 +196,7 @@ app.get('/about', (req, res) => {
         });
     }));
     //CREATE POST
-    app.post('/post', authUser, authRole(ROLE.ADMIN), wrapAsync(async (req, res, next) => {
+    app.post('/post', authUser, authRole(Group.findOne({name: "Admin"})), wrapAsync(async (req, res, next) => {
         const vPost = psSchema.validate(req.body);
         if (vPost.error) {
             hError("Error creating post!")
@@ -351,7 +318,7 @@ app.get('/about', (req, res) => {
     app.get('/game', (req, res) => {
         res.render('game',{title:"Game"})
     });
-    //404
+    //Catch invalid
     app.all('*', (req,res,next)=>{
         next(new exError(404,"Page not found!"))
     })
