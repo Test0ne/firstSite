@@ -18,7 +18,7 @@ module.exports.psSchema = Joi.object({
     }).required()
 });
 module.exports.commentSchema = Joi.object({
-    review: Joi.object({
+    comment: Joi.object({
         username: Joi.string().required(),
         comment: Joi.string().required()
     }).required()

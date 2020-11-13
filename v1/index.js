@@ -188,7 +188,7 @@ app.get('/about', (req, res) => {
 
 
 
-//====USER POSTS START
+//====USER POSTS start
     //ALL POSTS
     app.get('/post', wrapAsync(async (req, res) => {
         Post.find()
@@ -196,30 +196,38 @@ app.get('/about', (req, res) => {
             res.render('post', { title:"Posts", posts })
         });
     }));
+    //VIEW POST
+    app.get('/post/:id', wrapAsync(async (req, res) => {
+        const { id } = req.params;
+        const post = await Post.findById(id).populate('comments');;
+        
+        res.render('post/show',{ title:"Post by "+post.username, post })
+    }));
     //CREATE POST
-    app.post('/post', authUser, authRole(Group.findOne({name: "Admin"})), wrapAsync(async (req, res, next) => {
+    app.post('/post', wrapAsync(async (req, res, next) => {
+        
+        console.log("Sending post!")
         const vPost = psSchema.validate(req.body);
         if (vPost.error) {
             hError("Error creating post!")
             next(new exError(500,"Error making post!\n"+vPost.error.details))
         } else {
+            
+            console.log("No error!")
             const post = new Post(req.body.post);
             await post.save();
             res.redirect(`/post/${post._id}`);
         }
     }));
-    //VIEW POST
-    app.get('/post/:id', wrapAsync(async (req, res) => {
+    //DELETE POST
+    app.delete('/post/:id/delete', wrapAsync(async (req, res) => {
         const { id } = req.params;
-        try {
-            const response = await Post.findById(id);
-            res.render('post/show',{ title:"Post", response });
-        } catch (e) {
-            hError("/post/"+id+" get ERROR: "+e);
-        }
+        hDebug(`/post/${id}/delete patch`);
+        await Post.deleteOne({ _id: id });
+        res.redirect('/post');
     }));
     //EDIT POST PAGE
-    app.get('/post/:id/edit', authUser, authRole, wrapAsync(async (req, res) => {
+    app.get('/post/:id/edit', wrapAsync(async (req, res) => {
         const { id } = req.params;
         Post.findById(id)
             .then((response)=>{
@@ -227,59 +235,38 @@ app.get('/about', (req, res) => {
             });
     }));
     //EDIT POST ACTION
-    app.patch('/post/:id/edit', authUser, authRole, wrapAsync(async (req, res) => {
+    app.patch('/post/:id/edit', wrapAsync(async (req, res) => {
         const { id } = req.params;
         const foundPost = await Post.findById(id);
         foundPost.updatePost(req.body.comment);
         hDebug('Patch success');
         res.redirect('/post');
     }));
-    //DELETE POST
-    app.delete('/post/:id/delete', authUser, authRole, wrapAsync(async (req, res) => {
+//====POST COMMENTS
+    //CREATE COMMENT
+    app.post('/post/:id/comment', wrapAsync(async (req, res, next) => {
         const { id } = req.params;
-        hDebug(`/post/${id}/delete patch`);
-        await Post.deleteOne({ _id: id });
-        res.redirect('/post');
-    }));
-    //POST COMMENTS
-    app.post('/post/:id/comment', authUser, authRole, wrapAsync(async (req, res) => {
-        const { id } = req.params;
-        const { username: username = "Default", comment: comment = "undefined" } = req.body;
-        hDebug("COMMENT: "+comment);
-        const foundPost = await Post.findById(id);
-        foundPost.addComment(username,comment)
-            .then(()=>{
-                res.redirect(`/post/${id}`);
-            }).catch((e)=>{
-                hError("ERROR adding comment: "+e)
-            });
-    }));
-    //EDIT COMMENT PAGE
-    app.get('/post/:id/:cid/edit', authUser, authRole, wrapAsync(async (req, res) => {
-        const { id, cid } = req.params;
-        Post.findById(id)
-            .then((response)=>{
-                const {id, name, description, price, stock, rating, ratings, comments} = response;
-                const comment = comments.find(e => {
-                    const {id,username,comment} = e;
-                    return id == cid
-                });
-                res.render('post/cedit',{ title:"Edit comment", comment, id, name });
-            });
-    }));
-    //EDIT COMMENT ACTION
-    app.patch('/post/:id/:cid/edit', authUser, authRole, wrapAsync(async (req, res) => {
-        const { id, cid } = req.params;
-        const foundPostComment = await Post.findById(id);
-        foundPostComment.updateComment(cid,req.body.comment).then(()=>{
-            hDebug('Post comment patch success');
+
+        const vComment = commentSchema.validate(req.body);
+        console.log("REQ BODY:")
+        console.dir(req.body)
+        if (vComment.error) {
+            hError("Comment failed validation! DETAILS:\n"+vComment.error)
+            const msg = vComment.error.details.map(el => el.message).join(',')
+            next(new exError(500,"Error posting comment! ERROR DETAILS: "+msg))
+            //Final version should redirect to form with error msg for better user experience.
+            //res.redirect(`/post/${id}`, {title:"Post by ",error:"Error submitting comment! \n"+vReview.error,data:req.body.comment});
+        } else {
+            const post = await Post.findById(id);
+            const comment = new Comment(req.body.comment);
+            post.comments.push(comment);
+            await comment.save();
+            await post.save();
             res.redirect(`/post/${id}`);
-        }).catch((e)=>{
-            hError("Error updating comment!"+e);
-        });
+        }
     }));
     //DELETE COMMENT
-    app.delete('/post/:id/:cid/edit', authUser, authRole, wrapAsync(async (req, res) => {
+    app.delete('/post/:id/:cid', wrapAsync(async (req, res) => {
         const { id, cid } = req.params;
         const foundPost = await Post.findById(id);
         foundPost.deleteComment(cid).then(()=>{
@@ -288,6 +275,22 @@ app.get('/about', (req, res) => {
         }).catch((e)=>{
             hError("DELETE FAIL: "+e)
         });
+    }));
+    //EDIT COMMENT PAGE
+    app.get('/post/:id/:cid/edit', wrapAsync(async (req, res) => {
+        const { id, cid } = req.params;
+        const post = await Post.findById(id);
+        const comment = await Comment.findById(cid);
+        
+        res.render('post/cedit',{ title:"Edit comment", comment, post });
+    }));
+    //EDIT COMMENT ACTION
+    app.patch('/post/:id/:cid/edit', wrapAsync(async (req, res) => {
+        const { id, cid } = req.params;
+
+        await Comment.findByIdAndUpdate(cid, req.body, {runValidators: true});
+        hDebug('Comment patch success');
+        res.redirect(`/post/${id}`);
     }));
 //====USER POSTS END
 

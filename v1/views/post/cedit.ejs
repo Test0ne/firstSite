@@ -7,7 +7,7 @@
         <div class="border p-4 m-3">
             "<%=comment.comment%>"
         </div>
-        <form action="/post/<%=id%>/<%=comment.id%>/edit?_method=PATCH" method="post">
+        <form action="/post/<%=post._id%>/<%=comment._id%>/edit?_method=PATCH" method="post">
             <textarea name="comment" id="comment" class="col-12 text-center" cols="60" rows="5" ><%=comment.comment%></textarea>
             <div>
                 <button class="col-12 mb-2 btn btn-light">Edit</button>
@@ -23,7 +23,7 @@
         <ol class="breadcrumb col-12 justify-content-center">
             <li class="breadcrumb-item"><a href="/home">Home</a></li>
             <li class="breadcrumb-item"><a href="/post">Posts</a></li>
-            <li class="breadcrumb-item"><a href="/post/<%=id%>">Post (<%=name%></a></li>
+            <li class="breadcrumb-item"><a href="/post/<%=post._id%>">Post (<%=post.username%>)</a></li>
             <li class="breadcrumb-item active"  aria-current="page">Edit comment</li>
         </ol>
     </nav>

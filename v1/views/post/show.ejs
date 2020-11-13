@@ -1,61 +1,56 @@
 <%- layout('/layouts/boilerplate')%>
-<%var {id, username, comment, comments} = response;%>
 <div class="mcontent col-md-10 col-lg-10 col-xl-10 text-center bg-white row justify-content-center align-content-center m-0">
     <div class="col-md-12 col-lg-11 col-xl-10 mt-3">
         
-        <h2 class="col-12 mb-3">Post by <%=username%></h2>
+        <h2 class="col-12 mb-3">Post by <%=post.username%></h2>
         <div class="border psContainer row justify-content-center mb-5 p-5">
-            <%=comment%>
+            <%=post.comment%>
         </div>
     </div>
     <div class="pContainer col-12">
         <h4 class="text-center py-2">
             Add a comment
         </h4>
-        <form id="commentForm" class="row flex-column" action="/post/<%=id%>/comment" name="/post/<%=id%>/comment" method="post">
+        <form id="commentForm" class="row flex-column" action="/post/<%=post._id%>/comment" name="/post/<%=post._id%>/comment" method="post">
             <div class="form-group pb-4">
                 <label for="comment" name="msgboxl">Message</label>
-                <textarea type="text" id="commentBox" placeholder="Type here" class="form-control msgbox" name="comment"></textarea>
+                <textarea type="text" id="commentBox" placeholder="Type here" class="form-control msgbox" name="comment[comment]"></textarea>
             </div>
+            <input type="hidden" name="comment[username]" value="Default">
             <div class="form-group col-6 row align-self-center mb-5">
-                <button class="btn btn-success align-self-end col-12" name="<%=id%>">Post comment</button>
+                <button class="btn btn-success align-self-end col-12" name="<%=post._id%>">Post comment</button>
             </div>
         </form>
     </div>
-    <%  if (comments.length > 0) { %>
-        <h2 class="col-12 mb-3">All comments</h2>
-    <% } %>
+    <h2 class="col-12 mb-3"><%= post.comments.length > 0 ? 'All comments ('+(post.comments.length)+')' : 'No comments'%></h2>
     <div class="psContainer col-10 row justify-content-center mb-5">
         <% 
-        if (comments) {
-            let carr = Object.keys(comments).reverse();
-            for (let c of carr) {
-                if (comments[c].comment) {
+            for (let comment of post.comments) {
         %> 
             <div class="border col-12 text-left mb-2">
                 <div class="order-first mt-2">
                     <img src="/img/avatar.png" class="userAva border rounded mr-2 img-fluid rounded float-left">
                 </div>
                 <div class="col-12">
-                    <b><%=comments[c].username%></b>
+                    <b><%=comment.username%></b>
                 </div>
                 <div class="col-10 m-0">
-                    <%=comments[c].comment%>
+                    <%=comment.comment%>
                 </div>
                 <div class="row justify-content-start align-content-end">
-                    <a class="col-2 btn btn-light px-1 py-0 mr-2 my-1" href="/post/<%=id%>/<%=comments[c].id%>/edit">Edit</a>
-                    <form class="col-2 m-0 p-0" action="/post/<%=id%>/<%=comments[c].id%>/edit?_method=DELETE" method="post">
+                    <a class="col-2 btn btn-light px-1 py-0 mr-2 my-1" href="/post/<%=post._id%>/<%=comment._id%>/edit">Edit</a>
+                    <form class="col-2 m-0 p-0" action="/post/<%=post._id%>/<%=comment._id%>?_method=DELETE" method="post">
                         <button class="col-12 btn btn-light px-1 py-0 mr-2 my-1" type="submit" name="delete" value="delete">Delete</button>
                     </form>
                 </div>
             </div>
-        <% };};}; %> 
+        <% }; %> 
     </div>
     <nav class="col-12" aria-label="breadcrumb">
         <ol class="breadcrumb col-12 justify-content-center">
             <li class="breadcrumb-item"><a href="/home">Home</a></li>
             <li class="breadcrumb-item"><a href="/post">Posts</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Post by <%=username%></li>
+            <li class="breadcrumb-item active" aria-current="page">Post by <%=post.username%></li>
         </ol>
     </nav>
 </div>

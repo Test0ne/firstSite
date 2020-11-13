@@ -8,19 +8,23 @@ mongoose.connect('mongodb://localhost:27017/firstSite', {useNewUrlParser: true, 
 const Post = require('../models/posts');
 Post.insertMany([
     {
-        username: "someguyOTL",
-        comment: "I like cake."
+        username: "Brandon",
+        comment: "I like modeling."
     },
     {
-        username: "someguy42",
-        comment: "I like waffles."
+        username: "John",
+        comment: "I like Network Security."
     },
     {
-        username: "someguy426",
+        username: "Sean",
         comment: "I like pancakes."
     },
     {
-        username: "someguy711",
-        comment: "I like wax."
+        username: "Kassie",
+        comment: "I like unicorns, bunnies, and pink."
+    },
+    {
+        username: "Dami",
+        comment: "I like Toribash."
     }
 ])

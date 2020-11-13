@@ -102,7 +102,8 @@ const mainThread = () => {
 
                 //createPost("Name",message);
                 console.log("IS THIS THE FOOKIN CFRM VALUE? "+cbtn.name)
-                const res = await axios.post(cfrm.name,{ id: cbtn.name, username: "Unknown", comment: message });
+                let comment = {username: "Abel", comment: message};
+                const res = await axios.post(cfrm.name,{comment});
                 createAlert("Message posted!","inner-messageG").then((e)=>{
                     deb = e;
                     cbtn.toggleAttribute("disabled");
