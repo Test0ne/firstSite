@@ -9,10 +9,10 @@ This project includes the server-side files for my first website.
 >node index.js
 
 **Seed database with default groups**
->node seeds/index.js
+>node seeds/seed_groups.js
 
 **Seed database with posts**
 >node seeds/seed_posts.js
 
 **Seed database with products**
->node seeds/index.js
+>node seeds/seed_products.js
