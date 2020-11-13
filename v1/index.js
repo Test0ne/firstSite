@@ -6,6 +6,7 @@ const ejsMate = require('ejs-mate');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const methodOverride = require('method-override');
+const session = require('express-session');
 const { stringify } = require('querystring');
 const { type } = require('os');
 const { join } = require('path');
@@ -27,7 +28,8 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use(methodOverride('_method'))
-app.use(cookieParser('secretKeyExample'));
+app.use(cookieParser('secretKeyExample1'));
+app.use(session({ secret: 'secretKeyExample2' }))
 app.use(morgan('dev'));
 app.use(setUser)
 app.engine('ejs',ejsMate)
@@ -42,6 +44,10 @@ app.use('/store',productRoutes)
 app.use('/post',postRoutes)
 
 
+//session test
+app.get('/session', async (req, res) => {
+    res.send("Session test!")
+});
 //cookie read test
 app.get('/greet', async (req, res) => {
     const { name = "default" } = req.signedCookies;
