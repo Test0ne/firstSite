@@ -44,7 +44,7 @@ const productSchema = new Schema({
 productSchema.post('findOneAndDelete', async function(doc) {
     console.log("FindOneDelete Detected!")
     if (doc) {
-        await Review.remove({
+        await Review.deleteMany({
             _id: {$in: doc.comments}
         })
     }

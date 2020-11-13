@@ -20,7 +20,7 @@ const postSchema = new Schema({
 postSchema.post('findOneAndDelete', async function(doc) {
     console.log("FindOneDelete Detected!")
     if (doc) {
-        await Comment.remove({
+        await Comment.deleteMany({
             _id: {$in: doc.comments}
         })
     }
