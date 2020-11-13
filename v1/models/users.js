@@ -11,5 +11,10 @@ const userSchema = new Schema({
         required: true
     }]
 });
-const User = mongoose.model('Users',userSchema);
-module.exports = User;
+const groupSchema = new Schema({
+    name: String,
+    level: Number
+});
+
+module.exports.Group = mongoose.model('Groups',groupSchema);;
+module.exports.User = mongoose.model('Users',userSchema);
