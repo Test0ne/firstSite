@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const methodOverride = require('method-override');
 const session = require('express-session');
+const flash = require('connect-flash')
 const { stringify } = require('querystring');
 const { type } = require('os');
 const { join } = require('path');
@@ -40,35 +41,10 @@ app.set('view engine', 'ejs');
 //Routes
 const productRoutes = require('./routes/products')
 const postRoutes = require('./routes/posts')
+const testRoutes = require('./routes/tests')
 app.use('/store',productRoutes)
 app.use('/post',postRoutes)
-
-
-//session test
-app.get('/session', wrapAsync(async (req, res) => {
-    if (req.session.testVar)  {req.session.testVar += 1} else {req.session.testVar = 1}
-    res.render('error',{title: 'Session test',status:"Session test",message:"Visit "+req.session.testVar})
-}));
-//session name
-app.get('/setname', wrapAsync(async (req, res) => {
-    const { username = "Anonymous" } = req.query;
-    req.session.username = username;
-    res.redirect('/greets');
-}));
-//session greet
-app.get('/greets', async (req, res) => {
-    res.render('error',{title: 'Greet session',status:"Hello",message:req.session.username})
-});
-//cookie read test
-app.get('/greet', async (req, res) => {
-    const { name = "default" } = req.signedCookies;
-    res.render('error',{title: 'Greet',status:"Hello",message:name})
-});
-//cookie set test
-app.get('/nameset', async (req, res) => {
-    res.cookie('name','Swager', { signed: true })
-    res.render('error',{title: 'Cookie set',status:"Cookie has been set.",message:"Enjoy!"})
-});
+app.use('',testRoutes)
 
 
 //home page
