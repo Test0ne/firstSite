@@ -22,8 +22,12 @@ const Post = require('../models/posts');
     router.get('/:id', wrapAsync(async (req, res) => {
         const { id } = req.params;
         const post = await Post.findById(id).populate('comments');;
-        
-        res.render('post/show',{ title:"Post by "+post.username, post })
+        if (!post) {
+            hError("Error getting post!");
+            next(new exError(404,"Post not found!"));
+        } else {
+            res.render('post/show',{ title:"Post by "+post.username, post })
+        }
     }));
     //CREATE POST
     router.post('/', wrapAsync(async (req, res, next) => {

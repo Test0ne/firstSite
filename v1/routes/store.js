@@ -41,7 +41,12 @@ const Product = require('../models/products');
     router.get('/:id', wrapAsync(async (req, res, next) => {
         const { id } = req.params;
         const product = await Product.findById(id).populate('reviews');
-        res.render('store/show',{ title:"Store", product });
+        if (!product) {
+            hError("Error getting post!");
+            next(new exError(404,"Product not found!"));
+        } else {
+            res.render('store/show',{ title:"Store", product });
+        };
     }));
     //EDIT PRODUCT PAGE
     //router.get('/:id/edit', /** authUser, authRole(Group.findOne({name: "Admin"})), */ async (req, res) => {
