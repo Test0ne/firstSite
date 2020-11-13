@@ -42,7 +42,7 @@ const Product = require('../models/products');
         const { id } = req.params;
         const product = await Product.findById(id).populate('reviews');
         if (!product) {
-            hError("Error getting post!");
+            hError("Error getting product!");
             next(new exError(404,"Product not found!"));
         } else {
             res.render('store/show',{ title:"Store", product });

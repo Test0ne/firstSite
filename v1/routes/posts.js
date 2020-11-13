@@ -19,7 +19,7 @@ const Post = require('../models/posts');
         Post.find().then(posts=>res.render('post', { title:"Posts", posts }));
     }));
     //VIEW POST
-    router.get('/:id', wrapAsync(async (req, res) => {
+    router.get('/:id', wrapAsync(async (req, res, next) => {
         const { id } = req.params;
         const post = await Post.findById(id).populate('comments');;
         if (!post) {
