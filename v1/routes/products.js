@@ -6,7 +6,7 @@ const Joi = require('joi')
 const { prSchema, psSchema, commentSchema, reviewSchema } = require('../models/schemavs')
 
 //Import utils
-const { exError,hError,hDebug,hInfo,setUser,authUser,authRole,wrapAsync } = require('../utils/utils')
+const { exError,hError,hDebug,hInfo,authUser,authRole,wrapAsync } = require('../utils/utils')
 
 //Models
 const { User,Group } = require('../models/users');

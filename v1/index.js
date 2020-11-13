@@ -1,39 +1,38 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const methodOverride = require('method-override');
-const mongoose = require('mongoose');
-const ejsMate = require('ejs-mate')
-
-//Import utils
-const { exError,hError,hDebug,hInfo,setUser,authUser,authRole,wrapAsync } = require('./utils/utils')
-
 const morgan = require('morgan');
+const ejsMate = require('ejs-mate');
+const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
+const methodOverride = require('method-override');
 const { stringify } = require('querystring');
 const { type } = require('os');
 const { join } = require('path');
 
+//Import utils
+const { exError,hError,hDebug,hInfo,setUser,authUser,authRole,wrapAsync } = require('./utils/utils')
 
 mongoose.connect('mongodb://localhost:27017/firstSite', {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: true,
     useUnifiedTopology: true
-})
-    .then(()=>{hInfo("Connected to MongoDB.")})
-    .catch(e => hError("Error connecting to MongoDB: "+e));
+}).then(()=>{hInfo("Connected to MongoDB.")}).catch(e => hError("Error connecting to MongoDB: "+e));
 
 
+
+//Middleware/config
 app.use(express.static(path.join(__dirname, 'public')))
-app.use(methodOverride('_method'))
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
-app.use(setUser)
+app.use(methodOverride('_method'))
+app.use(cookieParser('secretKeyExample'));
 app.use(morgan('dev'));
+app.use(setUser)
 app.engine('ejs',ejsMate)
 app.set('views', path.join(__dirname, '/views'))
 app.set('view engine', 'ejs');
-
 
 
 //Routes
@@ -43,29 +42,25 @@ app.use('/store',productRoutes)
 app.use('/post',postRoutes)
 
 
-//cookie test
-app.get('/greet', (req, res) => {
-    res.send("Hello ")
+//cookie read test
+app.get('/greet', async (req, res) => {
+    const { name = "default" } = req.signedCookies;
+    res.render('error',{title: 'Greet',status:"Hello",message:name})
+});
+//cookie set test
+app.get('/nameset', async (req, res) => {
+    res.cookie('name','Swager', { signed: true })
+    res.render('error',{title: 'Cookie set',status:"Cookie has been set.",message:"Enjoy!"})
 });
 
-//cookie test
-app.get('/nameset', (req, res) => {
-    res.cookie('name','Dami')
-    res.send('Cookie sent!')
-});
 
 //home page
 app.get('/', (req, res) => {
     res.render('home',{title:"Home"})
 });
-app.get('/home', (req, res) => {
-    res.render('home',{title:"Home"})
-});
 app.get('/about', (req, res) => {
     res.render('about',{title:"About us"})
 });
-
-
 
 
 //====USER MANAGEMENT START
@@ -79,8 +74,6 @@ app.get('/about', (req, res) => {
         res.render('login', {title:"Sign in"})
     });
 //====USER MANAGEMENT END
-
-
 
 
 //====TV SEARCH API START
@@ -101,8 +94,6 @@ app.get('/about', (req, res) => {
 //====TV SEARCH API END
 
 
-
-
 //====Uncatgorized
     //GAME PAGE
     app.get('/game', (req, res) => {
@@ -113,8 +104,6 @@ app.get('/about', (req, res) => {
         next(new exError(404,"Page not found!"))
     })
 //====Uncatgorized
-
-
 
 
 //===ERROR MIDDLEWARE
@@ -128,8 +117,4 @@ app.use((err, req, res, next) => {
 })
 
 
-
-
-app.listen(3000, () => {
-    hInfo("LISTENING ON PORT 3000")
-});
+app.listen(3000, () => {hInfo("LISTENING ON PORT 3000")});
