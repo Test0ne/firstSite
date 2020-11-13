@@ -29,7 +29,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use(methodOverride('_method'))
 app.use(cookieParser('secretKeyExample1'));
-app.use(session({ secret: 'secretKeyExample2' }))
+app.use(session({ secret: 'secretKeyExample2', /**store: '',*/ resave: false, saveUninitialized: false}))
 app.use(morgan('dev'));
 app.use(setUser)
 app.engine('ejs',ejsMate)
@@ -45,8 +45,19 @@ app.use('/post',postRoutes)
 
 
 //session test
-app.get('/session', async (req, res) => {
-    res.send("Session test!")
+app.get('/session', wrapAsync(async (req, res) => {
+    if (req.session.testVar)  {req.session.testVar += 1} else {req.session.testVar = 1}
+    res.render('error',{title: 'Session test',status:"Session test",message:"Visit "+req.session.testVar})
+}));
+//session name
+app.get('/setname', wrapAsync(async (req, res) => {
+    const { username = "Anonymous" } = req.query;
+    req.session.username = username;
+    res.redirect('/greets');
+}));
+//session greet
+app.get('/greets', async (req, res) => {
+    res.render('error',{title: 'Greet session',status:"Hello",message:req.session.username})
 });
 //cookie read test
 app.get('/greet', async (req, res) => {
