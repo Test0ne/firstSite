@@ -20,11 +20,11 @@ const { exError,hError,hDebug,hInfo,setUser,authUser,authRole,wrapAsync } = requ
 const User = require('./models/users');
 const Group = require('./models/groups');
 
-const Post = require('./models/posts');
 const Comment = require('./models/comments');
-
-const Product = require('./models/products');
 const Review = require('./models/reviews');
+
+const Post = require('./models/posts');
+const Product = require('./models/products');
 
 const morgan = require('morgan');
 const { stringify } = require('querystring');
@@ -222,8 +222,7 @@ app.get('/about', (req, res) => {
     //DELETE POST
     app.delete('/post/:id/delete', wrapAsync(async (req, res) => {
         const { id } = req.params;
-        hDebug(`/post/${id}/delete patch`);
-        await Post.deleteOne({ _id: id });
+        await Post.findByIdAndDelete(id);
         res.redirect('/post');
     }));
     //EDIT POST PAGE
@@ -268,13 +267,9 @@ app.get('/about', (req, res) => {
     //DELETE COMMENT
     app.delete('/post/:id/:cid', wrapAsync(async (req, res) => {
         const { id, cid } = req.params;
-        const foundPost = await Post.findById(id);
-        foundPost.deleteComment(cid).then(()=>{
-            hDebug("DELETE SUCCESS")
-            res.redirect(`/post/${id}`);
-        }).catch((e)=>{
-            hError("DELETE FAIL: "+e)
-        });
+        await Post.findByIdAndUpdate(id,{$pull: {comments: cid}});
+        await Comment.findByIdAndDelete(cid);
+        res.redirect(`/post/${id}`);
     }));
     //EDIT COMMENT PAGE
     app.get('/post/:id/:cid/edit', wrapAsync(async (req, res) => {

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Comment = require('./comments');
 const Schema = mongoose.Schema
 
 const postSchema = new Schema({
@@ -16,5 +17,12 @@ const postSchema = new Schema({
         required: true
     }]
 });
-const Post = mongoose.model('Posts',postSchema);
-module.exports = Post;
+postSchema.post('findOneAndDelete', async function(doc) {
+    console.log("FindOneDelete Detected!")
+    if (doc) {
+        await Comment.remove({
+            _id: {$in: doc.comments}
+        })
+    }
+})
+module.exports = mongoose.model('Posts',postSchema);

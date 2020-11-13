@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Review = require('./reviews');
 const Schema = mongoose.Schema
 
 const productSchema = new Schema({
@@ -40,5 +41,12 @@ const productSchema = new Schema({
         ref: 'reviews'
     }]
 });
-const Product = mongoose.model('Products',productSchema);
-module.exports = Product;
+productSchema.post('findOneAndDelete', async function(doc) {
+    console.log("FindOneDelete Detected!")
+    if (doc) {
+        await Review.remove({
+            _id: {$in: doc.comments}
+        })
+    }
+})
+module.exports = mongoose.model('Products',productSchema);
