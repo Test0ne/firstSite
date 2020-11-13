@@ -1,0 +1,75 @@
+<%- layout('/layouts/boilerplate')%>
+<%var {_id: id,name,description,rating,ratings,price,stock,comments,image = "/img/product.png"} = response;%>
+
+<div class="mcontent col-md-10 col-lg-10 col-xl-10 text-center bg-white row justify-content-center align-content-center m-0">
+    <div class="col-md-12 col-lg-11 col-xl-10 mt-3">
+        
+        <h2 class="col-12 mb-3"><%=name%></h2>
+        <img src="<%=image%>" class="pImgFull border rounded">
+        <h2>Description</h2>
+        <p class="border p-2 m-2">
+            <%=description%>
+        </p>
+        <h4 class="font-weight-normal">$<%=price%></h4>
+        <%if (rating) {}%>
+        <div class="d-inline-flex">
+            <img src="/img/star.png" class="pRating">
+            <img src="/img/star.png" class="pRating">
+            <img src="/img/star.png" class="pRating">
+            <img src="/img/star.png" class="pRating">
+            <img src="/img/star.png" class="pRating">
+        </div>
+        <span class="font-weight-light ml-1">(<%=ratings%>)</span>
+        <div class="col-12">
+            <button name="<%=id%>" class="border btn btn-light px-1 py-0 mr-2 my-1">Add to cart</button>
+        </div>
+    </div>
+    <div class="pContainer col-12">
+        <h4 class="text-center py-2">
+            Add a review
+        </h4>
+        <form id="commentForm" class="flex-column justify-content-center align-content-center" action="/store/<%=id%>/comment" name="/store/<%=id%>/comment" method="post">
+            <div class="form-group pb-4">
+                <label for="comment" name="msgboxl">Message</label>
+                <textarea type="text" id="commentBox" placeholder="Type here" class="col-12 form-control msgbox" name="comment"></textarea>
+            </div>
+            <div class="form-group mb-5">
+                <button class="btn btn-success" name="<%=id%>">Post review</button>
+            </div>
+        </form>
+    </div>
+    <h2 class="col-12 mb-3"><%= comments.length > 0 ? 'All reviews ('+(comments.length)+')' : 'No reviews'%></h2>
+    <div class="psContainer col-10 row justify-content-center mb-5">
+        <% 
+        if (comments) {
+            let carr = Object.keys(comments).reverse();
+            for (let c of carr) {
+                if (comments[c].comment) {
+        %> 
+            <div class="border col-12 text-left mb-2">
+                <div class="order-first mt-2">
+                    <img src="/img/avatar.png" class="userAva border rounded mr-2 img-fluid rounded float-left">
+                </div>
+                <div class="col-12">
+                    <b><%=comments[c].username%></b>
+                </div>
+                <div class="col-10 m-0">
+                    <%=comments[c].comment%>
+                </div>
+                <div class="row justify-content-start align-content-end">
+                    <a class="col-2 btn btn-light px-1 py-0 mr-2 my-1" href="/store/<%=id%>/<%=comments[c].id%>/edit">Edit</a>
+                    <form class="col-2 m-0 p-0" action="/store/<%=id%>/<%=comments[c].id%>/edit?_method=DELETE" method="post">
+                        <button class="col-12 btn btn-light px-1 py-0 mr-2 my-1" type="submit" name="delete" value="delete">Delete</button>
+                    </form>
+                </div>
+            </div>
+        <% };};}; %> 
+    </div>
+    <nav class="col-12 mt-4" aria-label="breadcrumb">
+        <ol class="breadcrumb col-12 justify-content-center">
+            <li class="breadcrumb-item"><a href="/home">Home</a></li>
+            <li class="breadcrumb-item"><a href="/store">Store</a></li>
+            <li class="breadcrumb-item active"  aria-current="page">Product detail (<%=name%>)</li>
+        </ol>
+    </nav>
+</div>

@@ -1,0 +1,52 @@
+<%- layout('/layouts/boilerplate')%>
+<div class="mcontent col-md-10 col-lg-10 col-xl-10 text-center bg-white row justify-content-center align-content-center m-0">
+    <div class="col-md-12 col-lg-11 col-xl-10">
+        
+        <div class="pContainer">
+            <h1 class="text-center py-5">
+                Post message test
+            </h1>
+            <form id="postForm" class="row flex-column" action="/post" method="post">
+                <div class="form-group col-12 pb-4">
+                    <label for="comment" name="msgboxl">Message</label>
+                    <input type="text" id="commentBox" placeholder="Type here" class="form-control msgbox" name="post[comment]">
+                </div>
+                <div class="form-group col-6 row align-self-center mb-5">
+                    <button class="btn btn-success align-self-end col-12">Post message</button>
+                </div>
+            </form>
+        </div>
+        <h2 class="col-12 mb-3">All posts</h2>
+        <div class="psContainer row justify-content-center mb-5">
+            <%
+                let carr = Object.keys(posts).reverse();
+                for (let c of carr) {
+            %> 
+                <div class="border col-12 text-left mb-2">
+                    <div class="order-first mt-2">
+                        <img src="/img/avatar.png" class="userAva border rounded mr-2 img-fluid rounded float-left">
+                    </div>
+                    <div class="col-12">
+                        <b><%=posts[c].username%></b>
+                    </div>
+                    <div class="col-10 m-0">
+                        <a href="/post/<%=posts[c]._id%>"><%=posts[c].comment%></a>
+                    </div>
+                    <div class="row justify-content-start align-content-end">
+                        <a class="col-2 btn btn-light px-1 py-0 mr-2 my-1" href="/post/<%=posts[c]._id%>">Comments</a>
+                        <a class="col-2 btn btn-light px-1 py-0 mr-2 my-1" href="/post/<%=posts[c]._id%>/edit">Edit</a>
+                        <form class="col-2 m-0 p-0" action="/post/<%=posts[c]._id%>/delete?_method=DELETE" method="post">
+                            <button class="col-12 btn btn-light px-1 py-0 mr-2 my-1" type="submit" name="delete" value="delete">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            <%};  %> 
+        </div>
+    </div>
+    <nav class="col-12" aria-label="breadcrumb">
+        <ol class="breadcrumb col-12 justify-content-center">
+            <li class="breadcrumb-item"><a href="/home">Home</a></li>
+            <li class="breadcrumb-item active"  aria-current="page">Posts</li>
+        </ol>
+    </nav>
+</div>

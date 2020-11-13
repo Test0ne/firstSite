@@ -1,0 +1,205 @@
+body {
+    background-image: linear-gradient(180deg, rgb(55, 155, 195), #888, rgb(55, 155, 195));
+    background-repeat: repeat;
+    background-size: 2560px 1000px;
+}
+#pBuy {
+    position: absolute;
+    bottom: 0;
+}
+#pEdit {
+    position: absolute;
+    top: 0;
+}
+#pDesc {
+    min-height: 4rem;
+}
+#page {
+    margin: auto;
+    max-width: 1820px;
+}
+#Rating {
+    font-size: 1.25rem;
+}
+#cake {
+    color: white;
+    background-color: white;
+}
+#cake:hover {
+    background-color: rgba(44, 120, 155, 0.7);
+    width: 80%;
+    height: 20%;
+    transition: 400ms;
+}
+a {
+    text-decoration: none;
+}
+
+.pLink {
+    font-size: 1.5rem;
+    color: black;
+    -webkit-text-fill-color: rgb(0, 87, 145);
+    -webkit-text-stroke-width: 0.5px;
+    -webkit-text-stroke-color: black;
+    text-decoration: none;
+}
+.pLink:hover {
+    text-shadow: 1px 1px 3px black;
+    transform: 200ms;
+}
+@media (max-width: 1500px){
+    .pLink {
+        font-size: 1.2rem;
+    };
+}
+@media (max-width: 900px){
+    .pLink {
+        font-size: 2rem;
+    };
+}
+
+/*
+.pImg {
+    max-width: 90px;
+}
+
+.pImg:hover {
+    box-shadow: 1px 1px 3px black;
+}
+.pCont {
+    background-color: transparent;
+    background-image: linear-gradient(to bottom, rgba(94, 161, 238, 0.2) 50%, rgba(125, 185, 232, 0) 100%);
+    background-repeat: repeat;
+    border-radius:5px;
+    border-bottom: #000;
+}
+.pContInner {
+    background-color: transparent;
+    background-image: linear-gradient(to bottom, rgba(0, 119, 255, 0.05) 60%, rgba(88, 78, 150, 0.5) 100%);
+    background-repeat: repeat;
+    border-radius:5px;
+    border-bottom: #000;
+}
+*/
+
+.pImgFull {
+    max-width: 300px;
+}
+
+.pRating {
+    /* margin-top: 0.25rem; */
+    width: 1rem;
+}
+
+.navbar-brand {
+    font-weight: 800;
+    padding-right: 8px;
+    padding-left: 8px;
+    border-radius: 5px;
+}
+
+.userAva {
+    width: 64px;
+}
+
+h1,h2,h3 {
+    color: rgb(100, 155, 217);
+}
+
+#btcPriceTxt {
+    font-size: 2.5rem;
+    width: 50%;
+}
+
+@media (max-width: 900px){
+    #btcPriceTxt {
+        font-size: 2rem;
+        width: 100%;
+    }
+}
+
+#btcPrice {
+    color: orange;
+}
+
+#btcPriceCur {
+    color: green;
+}
+
+#signup {
+    max-width: 50rem;
+    transition: 250ms;
+}
+.media-container {
+    display: flex;
+    height: 500px;
+}
+
+#overMessages {
+    position: fixed;
+    margin-left: 20%;
+    width: 60%;
+    z-index: 100;
+}
+#inner-messageR {
+    margin: 0 auto;
+    background-color: rgba(200,100,100,0.9);
+}
+#inner-messageB {
+    margin: 0 auto;
+    background-color: rgba(144, 220, 255, 0.685);
+}
+#inner-messageG {
+    margin: 0 auto;
+    background-color: rgba(0, 255, 98, 0.5);
+}
+
+.navbar-brand:hover {
+    color: rgba(130,130,220,0.9);;
+    background-color: rgba(90,90,200,0.5);
+}
+
+.cake {
+    background-color:rgba(5, 5, 5, 0.5);
+    height: 1440px;
+}
+
+.unav{
+    background-color: #DDE;
+}
+
+.sbuts {
+    height: 2rem;
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.btn:hover {
+    box-shadow: 0.5px 0.5px 3px 0.5px #000 ;
+    transition: 0.1s;
+}
+
+.pContainer
+
+.psContainer p {
+    font-weight: 200;
+    font-size: 1.3rem;
+}
+
+.psContainer h1 {
+    font-weight: 400;
+    margin-left: 5px;
+}
+
+#p1, #p1Score {
+    color: green;
+    font-size: 2rem;
+}
+#p1Score,#p2Score {
+    font-weight: 300;
+    margin-left: 1rem;
+}
+#p2, #p2Score {
+    color: blue;
+    font-size: 2rem;
+}

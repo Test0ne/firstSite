@@ -1,0 +1,59 @@
+<%- layout('/layouts/boilerplate')%>
+<div class="mcontent col-md-10 col-lg-10 col-xl-10 text-center bg-white row justify-content-center align-content-center m-0">
+    <div class="col-12">
+        <h2 class="col-12 my-3">All products</h2>
+        <a href="/store/new"><button class="border btn btn-success px-1 my-2 py-0 mr-2 my-1">Add new product</button></a>
+        <div class="row justify-content-start mb-5">
+            <%
+                let carr = Object.keys(products).reverse();
+                for (let c of carr) {
+            %> 
+                <div class="pCont col-xl-3 col-lg-6 col-md-6 col-sm-6 text-left p-1">
+                    <div class="card border pContInner row p-2 m-0 h-100">
+                        <a class="aPcont m-0 p-0" href="/store/<%=products[c]._id%>">
+                            <%try {console.log("products[c].image"+products[c].image)%>
+                                <img src="<%= products[c].image !== undefined ? products[c].image : '/img/product.png'%>" class="img-thumbnail card-img-top border rounded">
+                            <%} catch {%>
+                                <img src="/img/product.png" class="card-img-top border rounded">
+                            <%}%>
+                        </a>
+                        <a class="col-12 card-title pLink m-0 p-0 mt-2" href="/store/<%=products[c]._id%>"><b class="m-0 p-0"><%=products[c].name%></b></a>
+                        <div class="card-text col-12 m-0 p-0">
+                            <div id="pDesc">
+                                <%=products[c].description%>
+                            </div>
+                            <div class="col-12 m-0">
+                                <%  var prat = products[c].rating
+                                    if (prat) {
+                                        if (prat > 0) {
+                                            for(var i=0; i<Math.min(prat,5); i++) {
+                                                %>
+                                                <img src="/img/star.png" class="pRating m-0 p-0">
+                                            <%}
+                                        }
+                                    }
+                                %>
+                                <span class="font-weight-light ml-1">(<%=products[c].ratings%>)</span>
+                            </div>
+                            <div class="col-12 m-0 mb-4">
+                                $<%=products[c].price%>
+                            </div>
+                        </div>
+                        
+                        <div id="pBuy" class="align-self-end align-bottom">
+                            <button name="<%=products[c]._id%>" class="border btn btn-light px-1 py-0 mr-2 my-1">Add to cart</button>
+                            <a href="/store/<%=products[c]._id%>"><button href="/store/<%=products[c]._id%>" class="border btn btn-light px-1 py-0 mr-2 my-1">Details</button></a>
+                            <a id="pEdit" href="/store/<%=products[c]._id%>/edit"><button class="align-self-end btn btn-primary px-1 py-0 mr-2 my-1">Edit</button></a>
+                        </div>
+                    </div>
+                </div>
+            <%};  %> 
+        </div>
+    </div>
+    <nav class="col-12" aria-label="breadcrumb">
+        <ol class="breadcrumb col-12 justify-content-center">
+            <li class="breadcrumb-item"><a href="/home">Home</a></li>
+            <li class="breadcrumb-item active"  aria-current="page">Store</li>
+        </ol>
+    </nav>
+</div>
