@@ -10,7 +10,7 @@ const Joi = require('joi')
 const { prSchema, psSchema, commentSchema, reviewSchema } = require('./models/schemavs')
 
 //Import utils
-const { exError,hError,hDebug,hInfo,setUser,authUser,authRole,wrapAsync } = require('./utils/exError')
+const { exError,hError,hDebug,hInfo,setUser,authUser,authRole,wrapAsync } = require('./utils/utils')
 
 //Routers, unused.
 //const projectRouter = require('./routes/projects');
@@ -35,6 +35,7 @@ const { join } = require('path');
 mongoose.connect('mongodb://localhost:27017/firstSite', {
     useNewUrlParser: true,
     useCreateIndex: true,
+    useFindAndModify: true,
     useUnifiedTopology: true
 }).then(()=>{hInfo("Connected to MongoDB.")})
 .catch(e => hError("Error connecting to MongoDB: "+e));
