@@ -62,9 +62,11 @@ app.use((req,res,next) => {
 //Routes
 const storeRoutes = require('./routes/store');
 const postRoutes = require('./routes/posts');
+const userRoutes = require('./routes/user');
 const testRoutes = require('./routes/tests');
 app.use('/store',storeRoutes);
 app.use('/post',postRoutes);
+app.use('',userRoutes);
 app.use('',testRoutes);
 
 
@@ -77,25 +79,13 @@ app.get('/about', (req, res) => {
 });
 
 
-//====USER MANAGEMENT START
-    app.get('/register', (req, res) => {
-        res.render('register', {title:"Sign up"});
-    });
-    app.post('/register', (req, res) => {
-        res.render('register', {title:"Sign up"});
-    });
-    app.get('/login', (req, res) => {
-        res.render('login', {title:"Sign in"});
-    });
-//====USER MANAGEMENT END
-
 
 //====TV SEARCH API START
-    app.get('/shows', (req, res) => {
+    app.get('/shows',authUser, (req, res) => {
         hDebug("/shows get");
         res.render('shows',{title:"Shows"});
     }); 
-    app.post('/shows', wrapAsync(async (req, res) => {
+    app.post('/shows',authUser, wrapAsync(async (req, res) => {
         console.log("Show test!");
         console.dir(req.body);
         const shows = await axios.get("http://api.tvmaze.com/search/shows?q="+req.body.search);
@@ -108,7 +98,7 @@ app.get('/about', (req, res) => {
 
 //====Uncatgorized
     //GAME PAGE
-    app.get('/game', (req, res) => {
+    app.get('/game',authUser, (req, res) => {
         res.render('game',{title:"Game"});
     });
     //Catch invalid

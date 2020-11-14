@@ -3,18 +3,18 @@
     <h1 class="justify-content-around text-center py-5">
         Sign up
     </h1>
-    <form class="validate-form row border rounded p-4 text-left" action="#nowhere" novalidate>
+    <form class="validate-form row border rounded p-4 text-left" action="/register" method="POST" novalidate>
         <div class="form-group col-12 pb-4">
             <label for="text" class="mb-2">Username</label>
-            <input type="text" class="form-control" name="text" id="text" placeholder="Username" required>
-        </div>
-        <div class="form-group col-12 pb-4">
-            <label for="email" class="mb-2">Email</label>
-            <input type="email" class="form-control" name="email" id="email" placeholder="Email" required>
+            <input type="text" class="form-control" name="register[username]" id="text" placeholder="Username" required>
         </div>
         <div class="form-group col-12 pb-4">
             <label for="password" class="mb-2">Password</label>
-            <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
+            <input type="password" class="form-control" name="register[password]" id="password" placeholder="Password" required>
+        </div>
+        <div class="form-group col-12 pb-4">
+            <label for="email" class="mb-2">Email</label>
+            <input type="email" class="form-control" name="register[email]" id="email" placeholder="Email" required>
         </div>
         <div class="custom-control custom-checkbox m-auto p-auto pb-4">
             <input type="checkbox" class="custom-control-input" id="customCheck1" required>

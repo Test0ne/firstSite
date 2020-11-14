@@ -22,11 +22,11 @@ const Product = require('../models/products');
         Product.find().then(products=>res.render('store', { title:"Store", products }));
     }));
     //CREATE PRODUCT PAGE
-    router.get('/new', /** authUser, authRole(Group.findOne({name: "Admin"})), */ wrapAsync(async (req, res) => {
+    router.get('/new', authUser, wrapAsync(async (req, res) => {
         res.render('store/create', {title:"Create new product"})
     }));
     //CREATE PRODUCT ACTION
-    router.put('/new', /** authUser, authRole(Group.findOne({name: "Admin"})), */ wrapAsync(async (req, res, next) => {
+    router.put('/new', authUser, wrapAsync(async (req, res, next) => {
         const vProduct = prSchema.validate(req.body);
         if (vProduct.error) {
             res.render('store/create', {title:"Create new product",error:"Error adding product! \n"+vProduct.error,data:req.body.product})
@@ -49,22 +49,20 @@ const Product = require('../models/products');
         };
     }));
     //EDIT PRODUCT PAGE
-    //router.get('/:id/edit', /** authUser, authRole(Group.findOne({name: "Admin"})), */ async (req, res) => {
-    router.get('/:id/edit', /** authUser, authRole(Group.findOne({name: "Admin"})), */ wrapAsync(async (req, res) => {
+    router.get('/:id/edit', authUser, wrapAsync(async (req, res) => {
         const { id } = req.params;
         const product = await Product.findById(id);
         res.render('store/edit',{ title:"Store", product });
     }));
     //EDIT PRODUCT ACTION
-    //router.put('/:id/edit', /** authUser, authRole(Group.findOne({name: "Admin"})), */ async (req, res) => {
-    router.put('/:id/edit', /** authUser, authRole(Group.findOne({name: "Admin"})), */ wrapAsync(async (req, res) => {
+    router.put('/:id/edit', authUser, wrapAsync(async (req, res) => {
         const { id } = req.params;
         await Product.findByIdAndUpdate(id, req.body, {runValidators: true});
         req.flash('success','Product has been edited!');
         res.redirect("/store/"+id);
     }));
     //DELETE PRODUCT
-    router.delete('/:id/edit', /** authUser, authRole(Group.findOne({name: "Admin"})), */ wrapAsync(async (req, res) => {
+    router.delete('/:id/edit', authUser, wrapAsync(async (req, res) => {
         const { id } = req.params;
         const product = await Product.findByIdAndDelete(id);
         req.flash('success',`Product '${product.name}' has been deleted!`);
@@ -75,7 +73,7 @@ const Product = require('../models/products');
 
 //====PRODUCT REVIEWS START
     //POST REVIEW
-    router.post('/:id/review', wrapAsync(async (req, res, next) => {
+    router.post('/:id/review', authUser, wrapAsync(async (req, res, next) => {
         const { id } = req.params;
 
         const vReview = reviewSchema.validate(req.body);
@@ -98,7 +96,7 @@ const Product = require('../models/products');
         }
     }));
     //EDIT REVIEW PAGE
-    router.get('/:id/:cid/edit', wrapAsync(async (req, res) => {
+    router.get('/:id/:cid/edit', authUser, wrapAsync(async (req, res) => {
         const { id, cid } = req.params;
         const product = await Product.findById(id);
         const review = await Review.findById(cid);
@@ -106,7 +104,7 @@ const Product = require('../models/products');
         res.render('store/cedit',{ title:"Edit review", product, review });
     }));
     //EDIT REVIEW ACTION
-    router.patch('/:id/:cid/edit', wrapAsync(async (req, res) => {
+    router.patch('/:id/:cid/edit', authUser, wrapAsync(async (req, res) => {
         const { id, cid } = req.params;
 
         await Review.findByIdAndUpdate(cid, req.body, {runValidators: true});
@@ -114,7 +112,7 @@ const Product = require('../models/products');
         res.redirect(`/store/${id}`);
     }));
     //DELETE REVIEW
-    router.delete('/:id/:cid/edit' , wrapAsync(async (req, res) => {
+    router.delete('/:id/:cid/edit' , authUser, wrapAsync(async (req, res) => {
         const { id, cid } = req.params;
         await Product.findByIdAndUpdate(id,{$pull: {reviews: cid}});
         await Review.findByIdAndDelete(cid);

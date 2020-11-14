@@ -26,14 +26,20 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/login">Sign in</a>
+                        <%if (typeof userName == 'undefined') {%>
+                            <a class="dropdown-item" href="/login">Sign in</a>
+                        <%} else {%>
+                            <a class="dropdown-item" href="/logout">Sign out</a>
+                        <%}%>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#">Profile</a>
                     </div>
                 </li>
+                <%if (typeof userName == 'undefined') {%>
                 <li class="nav-item">
                     <a class="btn btn-secondary mx-2" href="/register">Sign Up</a>
                 </li>
+                <% }%>
                 <!-- <li class="nav-item">
                     <form class="form-inline my-0">
                         <input class="form-control py-2 col-md-4 col-lg-8" type="search" placeholder="Search" aria-label="Search">

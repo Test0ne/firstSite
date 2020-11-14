@@ -15,11 +15,11 @@ const Post = require('../models/posts');
 
 //====USER POSTS start
     //ALL POSTS
-    router.get('/', wrapAsync(async (req, res) => {
+    router.get('/',authUser, wrapAsync(async (req, res) => {
         Post.find().then(posts=>res.render('post', { title:"Posts", posts }));
     }));
     //VIEW POST
-    router.get('/:id', wrapAsync(async (req, res, next) => {
+    router.get('/:id',authUser, wrapAsync(async (req, res, next) => {
         const { id } = req.params;
         const post = await Post.findById(id).populate('comments');;
         if (!post) {
@@ -30,7 +30,7 @@ const Post = require('../models/posts');
         }
     }));
     //CREATE POST
-    router.post('/', wrapAsync(async (req, res, next) => {
+    router.post('/',authUser, wrapAsync(async (req, res, next) => {
         
         console.log("Sending post!")
         const vPost = psSchema.validate(req.body);
@@ -47,14 +47,14 @@ const Post = require('../models/posts');
         }
     }));
     //DELETE POST
-    router.delete('/:id/delete', wrapAsync(async (req, res) => {
+    router.delete('/:id/delete',authUser, wrapAsync(async (req, res) => {
         const { id } = req.params;
         await Post.findByIdAndDelete(id);
         req.flash('success','Post has been deleted!');
         res.redirect('/post');
     }));
     //EDIT POST PAGE
-    router.get('/:id/edit', wrapAsync(async (req, res) => {
+    router.get('/:id/edit',authUser, wrapAsync(async (req, res) => {
         const { id } = req.params;
         Post.findById(id)
             .then((response)=>{
@@ -62,7 +62,7 @@ const Post = require('../models/posts');
             });
     }));
     //EDIT POST ACTION
-    router.patch('/:id/edit', wrapAsync(async (req, res) => {
+    router.patch('/:id/edit',authUser, wrapAsync(async (req, res) => {
         const { id } = req.params;
         await Post.findByIdAndUpdate(id, req.body, {runValidators: true});
         req.flash('success','Post has been edited!');
@@ -70,7 +70,7 @@ const Post = require('../models/posts');
     }));
 //====POST COMMENTS
     //CREATE COMMENT
-    router.post('/:id/comment', wrapAsync(async (req, res, next) => {
+    router.post('/:id/comment',authUser, wrapAsync(async (req, res, next) => {
         const { id } = req.params;
 
         const vComment = commentSchema.validate(req.body);
@@ -93,7 +93,7 @@ const Post = require('../models/posts');
         }
     }));
     //DELETE COMMENT
-    router.delete('/:id/:cid', wrapAsync(async (req, res) => {
+    router.delete('/:id/:cid',authUser, wrapAsync(async (req, res) => {
         const { id, cid } = req.params;
         await Post.findByIdAndUpdate(id,{$pull: {comments: cid}});
         await Comment.findByIdAndDelete(cid);
@@ -101,7 +101,7 @@ const Post = require('../models/posts');
         res.redirect(`/post/${id}`);
     }));
     //EDIT COMMENT PAGE
-    router.get('/:id/:cid/edit', wrapAsync(async (req, res) => {
+    router.get('/:id/:cid/edit',authUser, wrapAsync(async (req, res) => {
         const { id, cid } = req.params;
         const post = await Post.findById(id);
         const comment = await Comment.findById(cid);
@@ -109,7 +109,7 @@ const Post = require('../models/posts');
         res.render('post/cedit',{ title:"Edit comment", comment, post });
     }));
     //EDIT COMMENT ACTION
-    router.patch('/:id/:cid/edit', wrapAsync(async (req, res) => {
+    router.patch('/:id/:cid/edit',authUser, wrapAsync(async (req, res) => {
         const { id, cid } = req.params;
         await Comment.findByIdAndUpdate(cid, req.body, {runValidators: true});
         req.flash('success','Comment has been edited!');

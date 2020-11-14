@@ -7,18 +7,18 @@
             Sign in
         <%}%>
     </h1>
-    <form class="row border rounded p-4 text-left" action="#nowhere">
+    <form class="validate-form row border rounded p-4 text-left" action="/login" method="POST" novalidate>
         <div class="form-group col-12 pb-4">
-            <label for="text" class="mb-2">Username</label>
-            <input type="text" class="form-control" name="text" id="text" placeholder="Username">
+            <label for="username" class="mb-2">Username</label>
+            <input type="text" class="form-control" name="login[username]" id="username" placeholder="Username" required>
         </div>
         <div class="form-group col-12 pb-4">
             <label for="password" class="mb-2">Password</label>
-            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+            <input type="password" class="form-control" name="login[password]" id="password" placeholder="Password" required>
         </div>
         <div class="custom-control custom-checkbox m-auto p-auto pb-4">
             <input type="checkbox" class="custom-control-input" id="customCheck1">
-            <label class="custom-control-label" for="customCheck1">Remember me</label>
+            <label class="custom-control-label" for="customCheck1" required>Remember me</label>
         </div>
         <div class="ml-0 mt-3 row form-group col-12 justify-content-center">
             <button class="btn btn-success align-self-end col-12 w-50">Sign in</button>

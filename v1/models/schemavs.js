@@ -17,6 +17,13 @@ module.exports.psSchema = Joi.object({
         comment: Joi.string().required()
     }).required()
 });
+module.exports.uSchema = Joi.object({
+    register: Joi.object({
+        username: Joi.string().required(),
+        password: Joi.string().required().min(8).max(32),
+        email: Joi.string().required()
+    }).required()
+});
 module.exports.commentSchema = Joi.object({
     comment: Joi.object({
         username: Joi.string().required(),

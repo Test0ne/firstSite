@@ -18,12 +18,8 @@
 </div>
 <div id="searchCont" class="row justify-content-center">
     <%
-        console.log(typeof shows)
         if (typeof shows !== 'undefined') {
-            console.log("Shows is defined")
-            console.dir(shows)
             for (let result of shows) {
-                console.log("Adding show: "+result.show.name)
             %> 
             <div class="col-10 row justify-content-center align-items-center m-0 p-1 mb-3 border rounded bg-dark">
                 <a class="col-10 col-lg-4 col-xl-3 m-0 p-2 py-lg-0 pr-0 pr-lg-2 pr-md-1 row justify-content-center align-items-center text-center" href="<%=result.show.url%>">
