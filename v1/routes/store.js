@@ -82,9 +82,10 @@ const Product = require('../models/products');
         if (vReview.error) {
             hError("Review failed validation! DETAILS:\n"+vReview.error)
             const msg = vReview.error.details.map(el => el.message).join(',')
-            next(new exError(500,"Error posting review! ERROR DETAILS: "+msg))
-            //Final version should redirect to form with error msg for better user experience.
-            //res.redirect(`/${id}`, {title:"Create new product",error:"Error submitting review! \n"+vReview.error,data:req.body.review});
+            
+            req.flash('failure','Unable to submit your review! Please try again. ERROR: '+msg);
+            req.flash('data',req.body.review);
+            res.redirect(`/store/${id}`);
         } else {
             const product = await Product.findById(id);
             const review = new Review(req.body.review);

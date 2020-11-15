@@ -1,71 +1,75 @@
 <%- layout('/layouts/boilerplate')%>
-<div class="col-md-12 col-lg-11 col-xl-10 mt-3">
-    <h2 class="col-12 mb-3"><%=product.name%></h2>
-    <img src="<%=product.image%>" class="pImgFull border rounded">
-    <h2>Description</h2>
-    <p class="border p-2 m-2">
-        <%=product.description%>
-    </p>
-    <h4 class="font-weight-normal">$<%=product.price%></h4>
-    <%if (product.rating) {}%>
-    <div class="d-inline-flex">
-        <img src="/img/star.png" class="pRating">
-        <img src="/img/star.png" class="pRating">
-        <img src="/img/star.png" class="pRating">
-        <img src="/img/star.png" class="pRating">
-        <img src="/img/star.png" class="pRating">
+<%if (typeof product == "undefined") {%>
+    <div class="py-5"><h1 class="py-5">Unable to fetch product data. Please try again later.</h1></div>
+<%} else {%>
+    <div class="col-md-12 col-lg-11 col-xl-10 mt-3">
+        <h2 class="col-12 mb-3"><%=product.name%></h2>
+        <img src="<%=product.image%>" class="pImgFull border rounded">
+        <h2>Description</h2>
+        <p class="border p-2 m-2">
+            <%=product.description%>
+        </p>
+        <h4 class="font-weight-normal">$<%=product.price%></h4>
+        <%if (product.rating) {}%>
+        <div class="d-inline-flex">
+            <img src="/img/star.png" class="pRating">
+            <img src="/img/star.png" class="pRating">
+            <img src="/img/star.png" class="pRating">
+            <img src="/img/star.png" class="pRating">
+            <img src="/img/star.png" class="pRating">
+        </div>
+        <span class="font-weight-light ml-1">(<%=product.ratings%>)</span>
+        <div class="col-12">
+            <button name="<%=product._id%>" class="border btn btn-light px-1 py-0 mr-2 my-1">Add to cart</button>
+        </div>
     </div>
-    <span class="font-weight-light ml-1">(<%=product.ratings%>)</span>
-    <div class="col-12">
-        <button name="<%=product._id%>" class="border btn btn-light px-1 py-0 mr-2 my-1">Add to cart</button>
+    <div class="pContainer col-12">
+        <h4 class="text-center py-2">
+            Add a review
+        </h4>
+        <form id="commentForm" class="validate-form flex-column justify-content-center align-content-center" action="/store/<%=product._id%>/review" name="/store/<%=product._id%>/review" method="post" novalidate>
+            <div class="form-group pb-4">
+                <label for="comment" name="msgboxl">Message</label>
+                <textarea type="text" id="comment" placeholder="Type here" class="col-12 form-control msgbox" name="review[comment]" required></textarea>
+            </div>
+            <div>
+                <label for="rating">Rating</label>
+                <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating">
+            </div>
+            <input type="hidden" name="review[username]" value="Default">
+            <div class="form-group mb-5">
+                <button class="btn btn-success">Post review</button>
+            </div>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </form>
     </div>
-</div>
-<div class="pContainer col-12">
-    <h4 class="text-center py-2">
-        Add a review
-    </h4>
-    <form id="commentForm" class="validate-form flex-column justify-content-center align-content-center" action="/store/<%=product._id%>/review" name="/store/<%=product._id%>/review" method="post" novalidate>
-        <div class="form-group pb-4">
-            <label for="comment" name="msgboxl">Message</label>
-            <textarea type="text" id="comment" placeholder="Type here" class="col-12 form-control msgbox" name="review[comment]" required></textarea>
-        </div>
-        <div>
-            <label for="rating">Rating</label>
-            <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating">
-        </div>
-        <input type="hidden" name="review[username]" value="Default">
-        <div class="form-group mb-5">
-            <button class="btn btn-success">Post review</button>
-        </div>
-        <div class="valid-feedback">
-            Looks good!
-        </div>
-    </form>
-</div>
-<h2 class="col-12 mb-3"><%= product.reviews.length > 0 ? 'All reviews ('+(product.reviews.length)+')' : 'No reviews'%></h2>
-<div class="psContainer col-10 row justify-content-center mb-5">
-    <% 
-        for (let review of product.reviews) {
-    %> 
-        <div class="border col-12 text-left mb-2">
-            <div class="order-first mt-2">
-                <img src="/img/avatar.png" class="userAva border rounded mr-2 img-fluid rounded float-left">
+    <h2 class="col-12 mb-3"><%= product.reviews.length > 0 ? 'All reviews ('+(product.reviews.length)+')' : 'No reviews'%></h2>
+    <div class="psContainer col-10 row justify-content-center mb-5">
+        <% 
+            for (let review of product.reviews) {
+        %> 
+            <div class="border col-12 text-left mb-2">
+                <div class="order-first mt-2">
+                    <img src="/img/avatar.png" class="userAva border rounded mr-2 img-fluid rounded float-left">
+                </div>
+                <div class="col-12">
+                    <b><%=review.username%></b>
+                </div>
+                <div class="col-10 m-0">
+                    <%=review.comment%>
+                </div>
+                <div class="row justify-content-start align-content-end">
+                    <a class="col-2 btn btn-light px-1 py-0 mr-2 my-1" href="/store/<%=product._id%>/<%=review._id%>/edit">Edit</a>
+                    <form class="col-2 m-0 p-0" action="/store/<%=product._id%>/<%=review._id%>/edit?_method=DELETE" method="post">
+                        <button class="col-12 btn btn-light px-1 py-0 mr-2 my-1" type="submit" name="delete" value="delete">Delete</button>
+                    </form>
+                </div>
             </div>
-            <div class="col-12">
-                <b><%=review.username%></b>
-            </div>
-            <div class="col-10 m-0">
-                <%=review.comment%>
-            </div>
-            <div class="row justify-content-start align-content-end">
-                <a class="col-2 btn btn-light px-1 py-0 mr-2 my-1" href="/store/<%=product._id%>/<%=review._id%>/edit">Edit</a>
-                <form class="col-2 m-0 p-0" action="/store/<%=product._id%>/<%=review._id%>/edit?_method=DELETE" method="post">
-                    <button class="col-12 btn btn-light px-1 py-0 mr-2 my-1" type="submit" name="delete" value="delete">Delete</button>
-                </form>
-            </div>
-        </div>
-    <% }; %> 
-</div>
+        <% }; %> 
+    </div>
+<%}%>
 <nav class="col-12 mt-4" aria-label="breadcrumb">
     <ol class="breadcrumb col-12 justify-content-center">
         <li class="breadcrumb-item"><a href="/">Home</a></li>

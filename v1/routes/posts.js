@@ -79,9 +79,10 @@ const Post = require('../models/posts');
         if (vComment.error) {
             hError("Comment failed validation! DETAILS:\n"+vComment.error)
             const msg = vComment.error.details.map(el => el.message).join(',')
-            next(new exError(500,"Error posting comment! ERROR DETAILS: "+msg))
-            //Final version should redirect to form with error msg for better user experience.
-            //res.redirect(`/post/${id}`, {title:"Post by ",error:"Error submitting comment! \n"+vReview.error,data:req.body.comment});
+            
+            req.flash('failure','Unable to submit your comment! Please try again. ERROR: '+msg);
+            req.flash('data',req.body.comment);
+            res.redirect(`/post/${id}`);
         } else {
             const post = await Post.findById(id);
             const comment = new Comment(req.body.comment);
