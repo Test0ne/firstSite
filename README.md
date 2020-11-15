@@ -30,4 +30,8 @@ This project includes the server-side files for my first website.
 >node seeds/seed_posts.js
 
 **Seed database with products**
+<<<<<<< HEAD
 >node seeds/seed_products.js
+=======
+>node seeds/seed_products.js
+>>>>>>> a4bd20dbe8419ac29ab3449412ab92e5f030e5cc
