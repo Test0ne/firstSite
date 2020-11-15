@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema
+const passportLocalMongoose = require('passport-local-mongoose')
 
 const userSchema = new Schema({
     username: {
@@ -35,5 +36,6 @@ const groupSchema = new Schema({
     }
 });
 
-module.exports.Group = mongoose.model('groups',groupSchema);;
+userSchema.plugin(passportLocalMongoose);
+module.exports.Group = mongoose.model('groups',groupSchema);
 module.exports.User = mongoose.model('Users',userSchema);

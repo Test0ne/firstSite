@@ -1,10 +1,8 @@
 const colorize = require('colorize');
-const cconsole = colorize.console;
-const hError = (e) => {cconsole.log(`#red[${e}]`)};
-const hDebug = (e) => {cconsole.log(`#cyan[${e}]`)};
-const hInfo = (e) => {cconsole.log(`#green[${e}]`)};
-//Models
-const { User,Group } = require('../models/users');
+const cc = colorize.console;
+module.exports.hError = hError = (e) => {cc.log(`#red[${e}]`)};
+module.exports.hDebug = hDebug = (e) => {cc.log(`#cyan[${e}]`)};
+module.exports.hInfo = hInfo = (e) => {cc.log(`#green[${e}]`)};
 
 //===========
 //Error handlers
@@ -16,28 +14,43 @@ class exError extends Error {
         this.status = status;
     }
 }
-function wrapAsync(fn) {
+module.exports.exError = exError;
+module.exports.wrapAsync = function (fn) {
     return function(req,res,next) {
         fn(req,res,next).catch((e) => next(e))
     }
 }
+module.exports.routeCatch = function (err, req, res, next) {
+    const { status = 500 } = err;
+    const { message = "Something went wrong.\nERROR: "} = err;
+    hError("ERROR MSG: "+message);
+    hError("ERROR STATUS: "+status);
+    res.render('error',{title: status+' error!',status,message});
+}
 //===========
 //User utils
 //===========
-function setUser (req,res,next) {
+module.exports.setUser = function (req,res,next) {
+    //setUser
     const userid = req.session.userId;
     if (userid) {res.locals.userId = userid}
     const username = req.session.userName;
     if (username) {res.locals.userName = username}
+
+    //setFlash
+    res.locals.data = req.flash('data');
+    res.locals.success = req.flash('success');
+    res.locals.failure = req.flash('failure');
+    res.locals.shows = req.flash('shows');
     next()
 }
-function authUser (req,res,next) {
+module.exports.authUser = function (req,res,next) {
     if (!req.session.userId) {
         return res.status(403).render('login',{title:"You must be signed in for this!", message: `Please sign in to access ${req.path}`})
     }
     next()
 }
-function authRole (group) {
+module.exports.authRole = function (group) {
     return (req,res,next) => {
         if (req.user.group !== group) {
             next(new exError(401,"Access denied. WTF?."))
@@ -46,12 +59,3 @@ function authRole (group) {
         }
     }
 }
-
-module.exports.exError = exError;
-module.exports.hError = hError;
-module.exports.hDebug = hDebug;
-module.exports.hInfo = hInfo;
-module.exports.setUser = setUser;
-module.exports.authUser = authUser;
-module.exports.authRole = authRole;
-module.exports.wrapAsync = wrapAsync;

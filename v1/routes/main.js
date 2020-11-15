@@ -1,17 +1,39 @@
 const express = require('express')
 const router = express.Router()
 
-//Schema validations
-const Joi = require('joi')
-const { prSchema, psSchema, commentSchema, reviewSchema } = require('../models/schemavs')
-
 //Import utils
-const { exError,hError,hDebug,hInfo,setUser,authUser,authRole,wrapAsync } = require('../utils/utils')
+const {hDebug,authUser,wrapAsync} = require('../utils/utils')
 
-//Models
-const { User,Group } = require('../models/users');
+//====HOME + ABOUT
+router.get('/', (req, res) => {
+    res.render('home',{title:"Home"});
+});
+router.get('/about', (req, res) => {
+    res.render('about',{title:"About us"});
+});
+//====HOME + ABOUT
 
-//Require sign in
-//router.use(authUser)
+
+//====TV SEARCH API
+    router.get('/shows',authUser, (req, res) => {
+        hDebug("/shows get");
+        res.render('shows',{title:"Shows"});
+    }); 
+    router.post('/shows',authUser, wrapAsync(async (req, res) => {
+        console.log("Show test!");
+        console.dir(req.body);
+        const shows = await axios.get("http://api.tvmaze.com/search/shows?q="+req.body.search);
+        req.flash('success','Search results received!');
+        req.flash('shows',shows.data);
+        res.redirect('/shows');
+    }));
+//====TV SEARCH API
+
+
+//====GAME
+    router.get('/game',authUser, (req, res) => {
+        res.render('game',{title:"Game"});
+    });
+//====GAME
 
 module.exports = router;
