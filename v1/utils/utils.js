@@ -31,11 +31,12 @@ module.exports.routeCatch = function (err, req, res, next) {
 //User utils
 //===========
 module.exports.setUser = function (req,res,next) {
+    console.log("Set user running");
     //setUser
     const userid = req.session.userId;
-    if (userid) {res.locals.userId = userid}
+    if (userid) {res.locals.userId = userid;console.log("Set user id: "+userid)};
     const username = req.session.userName;
-    if (username) {res.locals.userName = username}
+    if (username) {res.locals.userName = username;console.log("Set username: "+username)};
 
     //setFlash
     res.locals.data = req.flash('data');

@@ -1,10 +1,7 @@
 <%- layout('/layouts/boilerplate')%>
 
 <div class="col-md-12 col-lg-11 col-xl-10 mt-3">
-    
     <h2 class="col-12 mb-3">Edit product <small class="text-dark"><%=product.name%></small></h2>
-
-
     <form class="row justify-content-center" action="/store/<%=product._id%>/edit?_method=PUT" method="POST">
         <div class="border rounded col-12 m-1 p-1 py-4">
             <label class="col-6 font-weight-bold" for="name">Product Name</label>
@@ -23,7 +20,6 @@
         </div>
         <button class="col-6 mb-2 btn btn-primary my-2">Edit product</button>
         <label class="col-12" for="name"><h3>Database Info</h3></label>
-        
     </form>
     <div class="border rounded col-12 m-1 p-1 py-4">
         <label class="col-3" for="id">ID</label>

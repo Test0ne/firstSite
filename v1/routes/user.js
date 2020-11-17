@@ -25,13 +25,11 @@ const { User,Group } = require('../models/users');
             req.flash('failure','Failed to create account!');
             res.redirect('/register')
         } else {
-            const fUser = await User.findOne({$or:[{username: rdat.username},{email: rdat.username}]});
-            const fEmail = await User.findOne({$or:[{username: rdat.email},{email: rdat.email}]});
-            if (fUser) {
+            if (await User.findOne({$or:[{username: rdat.username},{email: rdat.username}]})) {
                 req.flash('data',rdat);
                 req.flash('failure','Username is taken!');
                 res.redirect('/register')
-            } else if (fEmail) {
+            } else if (await User.findOne({$or:[{username: rdat.email},{email: rdat.email}]})) {
                 req.flash('data',rdat);
                 req.flash('failure','Email address is taken!');
                 res.redirect('/register')
@@ -42,9 +40,8 @@ const { User,Group } = require('../models/users');
                 rdat.groups = ["Member"];
                 
                 const user = new User(rdat);
-
                 await user.save();
-
+                
                 req.session.userId = user._id;
                 req.flash('success','Account created!');
                 res.redirect(`/`)
@@ -69,6 +66,7 @@ const { User,Group } = require('../models/users');
                     req.flash('success','Login success!');
                     req.session.userName = fUser.username;
                     req.session.userId = fUser._id;
+                    console.log("Logged in!")
                     res.redirect('/')
                 } else {
                     console.log("compare fail!")

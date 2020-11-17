@@ -26,25 +26,24 @@ const Post = require('../models/posts');
             hError("Error getting post!");
             next(new exError(404,"Post not found!"));
         } else {
-            res.render('post/show',{ title:"Post by "+post.username, post })
+            res.render('post/show',{ title:"Post by "+post.username, post });
         }
     }));
     //CREATE POST
     router.post('/',authUser, wrapAsync(async (req, res, next) => {
-        
-        console.log("Sending post!")
+        console.log("Sending post!");
         const vPost = psSchema.validate(req.body);
+        console.dir(vPost.error);
         if (vPost.error) {
-            hError("Error creating post!")
-            next(new exError(500,"Error making post!\n"+vPost.error.details))
+            hError("Error creating post!");
+            next(new exError(500,"Error making post! \n"+vPost.error.details[0].message));
         } else {
-            
-            console.log("No error!")
+            hDebug("No error!");
             const post = new Post(req.body.post);
             await post.save();
             req.flash('success','Post has been created!');
             res.redirect(`/post`);
-        }
+        };
     }));
     //DELETE POST
     router.delete('/:id/delete',authUser, wrapAsync(async (req, res) => {
@@ -72,10 +71,8 @@ const Post = require('../models/posts');
     //CREATE COMMENT
     router.post('/:id/comment',authUser, wrapAsync(async (req, res, next) => {
         const { id } = req.params;
-
         const vComment = commentSchema.validate(req.body);
-        console.log("REQ BODY:")
-        console.dir(req.body)
+        //Validate input matches schema
         if (vComment.error) {
             hError("Comment failed validation! DETAILS:\n"+vComment.error)
             const msg = vComment.error.details.map(el => el.message).join(',')
