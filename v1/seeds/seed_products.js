@@ -8,6 +8,7 @@ mongoose.connect('mongodb://localhost:27017/firstSite', {useNewUrlParser: true, 
 const Product = require('../models/products');
 Product.insertMany([
     {
+        seller: "5fb7996d3a5ccd48c897a79d",
         name: "Example cake 1",
         image: "/img/cake.png",
         description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut labore autem et vel aliquid quae corporis eaque alias inventore eum, sunt tempore? Ratione labore, voluptatum laborum sint aliquam aut reprehenderit?",
@@ -17,6 +18,7 @@ Product.insertMany([
         price: 99.99
     },
     {
+        seller: "5fb7996d3a5ccd48c897a79d",
         name: "Example cake 2",
         description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut labore autem et vel aliquid quae corporis eaque alias inventore eum, sunt tempore? Ratione labore, voluptatum laborum sint aliquam aut reprehenderit?",
         image: "/img/gold.png",
@@ -26,6 +28,7 @@ Product.insertMany([
         price: 199.99
     },
     {
+        seller: "5fb7996d3a5ccd48c897a79d",
         name: "Example cake 3",
         description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut labore autem et vel aliquid quae corporis eaque alias inventore eum, sunt tempore? Ratione labore, voluptatum laborum sint aliquam aut reprehenderit?",
         image: "/img/p1.png",
@@ -35,6 +38,7 @@ Product.insertMany([
         price: 299.99
     },
     {
+        seller: "5fb7996d3a5ccd48c897a79d",
         name: "Not cake",
         description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut labore autem et vel aliquid quae corporis eaque alias inventore eum, sunt tempore? Ratione labore, voluptatum laborum sint aliquam aut reprehenderit?",
         image: "/img/purp.png",
@@ -44,6 +48,7 @@ Product.insertMany([
         price: 399.99
     },
     {
+        seller: "5fb7996d3a5ccd48c897a79d",
         name: "The answer to life",
         image: "/img/server.png",
         description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut labore autem et vel aliquid quae corporis eaque alias inventore eum, sunt tempore? Ratione labore, voluptatum laborum sint aliquam aut reprehenderit?",

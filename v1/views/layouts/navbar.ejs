@@ -1,26 +1,31 @@
 <div class="row m-0">
     <nav class="col-12 navbar navbar-expand-md navbar-light bg-light rounded-top mb-1">
-        <div class="container-fluid">
+        <div class="container-fluid p-0">
             <!-- Navbar -->
             <a class="navbar-brand" href="/">Brand name</a>
+
             <!-- Mobile dropdown -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <!-- Nav links -->
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <div class="navbar-nav">
-                    <a class="nav-link btn <%= (title == "Home") ? 'border rounded' : ''%>" href="/">Home</a>
-                    <a class="nav-link btn <%= (title == "Store") ? 'border rounded' : ''%>" href="/store">Store</a>
-                    <a class="nav-link btn <%= (title == "Posts") ? 'border rounded' : ''%>" href="/post">Posts</a>
-                    <a class="nav-link btn <%= (title == "Game") ? 'border rounded' : ''%>" href="/game">Game</a>
-                    <a class="nav-link btn <%= (title == "Shows") ? 'border rounded' : ''%>" href="/shows">TV search</a>
+                    <a class="nav-link btn mr-1 <%= (title == "Home") ? 'border rounded' : ''%>" href="/">Home</a>
+                    <a class="nav-link btn mr-1 <%= (title == "Store") ? 'border rounded' : ''%>" href="/store">Store</a>
+                    <a class="nav-link btn mr-1 <%= (title == "Posts") ? 'border rounded' : ''%>" href="/post">Posts</a>
+                    <a class="nav-link btn mr-1 <%= (title == "Game") ? 'border rounded' : ''%>" href="/game">Game</a>
+                    <a class="nav-link btn mr-1 <%= (title == "Shows") ? 'border rounded' : ''%>" href="/shows">TV search</a>
                 </div>
                 <div class="navbar-nav ml-auto">
-                    <a class="nav-link btn" href="/login">Sign in</a>
-                    <a class="nav-link btn" href="/logout">Sign out</a>
-                    <a class="nav-link btn" href="/register">Sign Up</a>
+                    <%if (typeof currentUser !== "undefined") {%>
+                        <a class="nav-link btn" href="/logout">Sign out</a>
+                    <% } else { %> 
+                        <a class="nav-link btn btn-outline-secondary" href="/register">Sign Up</a>
+                        <a class="nav-link btn mx-1" href="/login">Sign in</a>
+                    <% }; %> 
                 </div>
             </div>
         </div>

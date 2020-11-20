@@ -7,6 +7,8 @@ module.exports.prSchema = Joi.object({
         price: Joi.number().required(),
         stock: Joi.number().required(),
         image: Joi.string().required(),
+        seller: Joi.object().required(),
+        created: Joi.number().required(),
         description: Joi.string().required()
         //rating: Joi.number().required(),
         //ratings: Joi.number().required(),
@@ -16,6 +18,8 @@ module.exports.prSchema = Joi.object({
 module.exports.psSchema = Joi.object({
     post: Joi.object({
         username: Joi.string().required(),
+        userId: Joi.object().required(),
+        created: Joi.number().required(),
         comment: Joi.string().required()
     }).required()
 });
@@ -38,6 +42,8 @@ module.exports.uSchema = Joi.object({
 module.exports.commentSchema = Joi.object({
     comment: Joi.object({
         username: Joi.string().required(),
+        userId: Joi.object().required(),
+        created: Joi.number().required(),
         comment: Joi.string().required()
     }).required()
 });
@@ -45,6 +51,8 @@ module.exports.reviewSchema = Joi.object({
     review: Joi.object({
         username: Joi.string().required(),
         comment: Joi.string().required(),
+        userId: Joi.object().required(),
+        created: Joi.number().required(),
         rating: Joi.number().required()
     }).required()
 });

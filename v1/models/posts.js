@@ -7,6 +7,11 @@ const postSchema = new Schema({
         type: String,
         required: [true,"Username not found"]
     },
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Users',
+        required: true
+    },
     comment: {
         type: String,
         required: [true,"Comment is blank"]

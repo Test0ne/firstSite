@@ -6,23 +6,24 @@
         <%
             let carr = Object.keys(products).reverse();
             for (let c of carr) {
+            product = products[c]
         %> 
             <div class="pCont col-xl-3 col-lg-6 col-md-6 col-sm-6 text-left p-1">
                 <div class="card border pContInner row p-2 m-0 h-100">
-                    <a class="aPcont m-0 p-0" href="/store/<%=products[c]._id%>">
+                    <a class="aPcont m-0 p-0" href="/store/<%=product._id%>">
                         <%try {%>
-                            <img src="<%= products[c].image !== undefined ? products[c].image : '/img/product.png'%>" class="img-thumbnail card-img-top border rounded">
+                            <img src="<%= product.image !== undefined ? product.image : '/img/product.png'%>" class="img-thumbnail card-img-top border rounded">
                         <%} catch {%>
                             <img src="/img/product.png" class="card-img-top border rounded">
                         <%}%>
                     </a>
-                    <a class="col-12 card-title pLink m-0 p-0 mt-2" href="/store/<%=products[c]._id%>"><b class="m-0 p-0"><%=products[c].name%></b></a>
+                    <a class="col-12 card-title pLink m-0 p-0 mt-2" href="/store/<%=product._id%>"><b class="m-0 p-0"><%=product.name%></b></a>
                     <div class="card-text col-12 m-0 p-0">
                         <div id="pDesc">
-                            <%=products[c].description%>
+                            <%=product.description%>
                         </div>
                         <div class="col-12 m-0">
-                            <%  var prat = products[c].rating
+                            <%  var prat = product.rating
                                 if (prat) {
                                     if (prat > 0) {
                                         for(var i=0; i<Math.min(prat,5); i++) {
@@ -32,17 +33,22 @@
                                     }
                                 }
                             %>
-                            <span class="font-weight-light ml-1">(<%=products[c].ratings%>)</span>
+                            <span class="font-weight-light ml-1">(<%=product.ratings%>)</span>
                         </div>
                         <div class="col-12 m-0 mb-4">
-                            $<%=products[c].price%>
+                            $<%=product.price%>
                         </div>
                     </div>
                     
                     <div id="pBuy" class="align-self-end align-bottom">
-                        <button name="<%=products[c]._id%>" class="border btn btn-light px-1 py-0 mr-2 my-1">Add to cart</button>
-                        <a href="/store/<%=products[c]._id%>"><button href="/store/<%=products[c]._id%>" class="border btn btn-light px-1 py-0 mr-2 my-1">Details</button></a>
-                        <a id="pEdit" href="/store/<%=products[c]._id%>/edit"><button class="align-self-end btn btn-primary px-1 py-0 mr-2 my-1">Edit</button></a>
+                        <button name="<%=product._id%>" class="border btn btn-light px-1 py-0 mr-2 my-1">Add to cart</button>
+                        <a href="/store/<%=product._id%>"><button href="/store/<%=product._id%>" class="border btn btn-light px-1 py-0 mr-2 my-1">Details</button></a>
+                        <%if (typeof currentUser !== "undefined") {if (typeof product.seller !== "undefined") {if (product.seller.equals(currentUser._id)) {%>
+                            <a id="pEdit" href="/store/<%=product._id%>/edit"><button class="align-self-end btn btn-primary px-1 py-0 mr-2 my-1">Edit</button></a>
+                            <form class="inline-block m-0 p-0" action="/store/<%=product._id%>/<%=product._id%>?_method=DELETE" method="post">
+                                <button class="btn btn-light px-1 py-0 mr-2 my-1" type="submit" name="delete" value="delete">Delete</button>
+                            </form>
+                        <%};};};%>
                     </div>
                 </div>
             </div>

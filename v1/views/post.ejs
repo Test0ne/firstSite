@@ -22,23 +22,27 @@
         <%
             let carr = Object.keys(posts).reverse();
             for (let c of carr) {
+            post = posts[c]
         %> 
-            <div class="border col-12 text-left mb-2">
+            <div class="border col-12 text-left pb-1 mb-2 rounded">
                 <div class="order-first mt-2">
                     <img src="/img/avatar.png" class="userAva border rounded mr-2 img-fluid rounded float-left">
                 </div>
                 <div class="col-12">
-                    <b><%=posts[c].username%></b>
+                    <b><%=post.username%></b>
                 </div>
-                <div class="col-10 m-0">
-                    <a href="/post/<%=posts[c]._id%>"><%=posts[c].comment%></a>
+                <div class="col-10 m-0 pb-4">
+                    <a href="/post/<%=post._id%>"><%=post.comment%></a>
                 </div>
                 <div class="row justify-content-start align-content-end">
-                    <a class="col-2 btn btn-light px-1 py-0 mr-2 my-1" href="/post/<%=posts[c]._id%>">Comments</a>
-                    <a class="col-2 btn btn-light px-1 py-0 mr-2 my-1" href="/post/<%=posts[c]._id%>/edit">Edit</a>
-                    <form class="col-2 m-0 p-0" action="/post/<%=posts[c]._id%>/delete?_method=DELETE" method="post">
+                    <a class="col-2 btn btn-light px-1 py-0 ml-2 mr-2 my-1" href="/post/<%=post._id%>">Comments</a>
+                    
+                    <%if (typeof currentUser !== "undefined") { if (typeof post.userId !== "undefined") {if (post.userId.equals(currentUser._id)) {%>
+                    <a class="col-2 btn btn-light px-1 py-0 mr-2 my-1" href="/post/<%=post._id%>/edit">Edit</a>
+                    <form class="col-2 m-0 p-0" action="/post/<%=post._id%>/delete?_method=DELETE" method="post">
                         <button class="col-12 btn btn-light px-1 py-0 mr-2 my-1" type="submit" name="delete" value="delete">Delete</button>
                     </form>
+                    <% }}}; %>
                 </div>
             </div>
         <%};  %> 

@@ -18,7 +18,7 @@ const Product = require('../models/products');
 //====PRODUCT STORE START
     //ALL PRODUCTS
     router.get('/', wrapAsync(async (req, res) => {
-        Product.find().then(products=>res.render('store', { title:"Store", products }));
+        Product.find().populate('userId').then(products=>res.render('store', { title:"Store", products }));
     }));
     //CREATE PRODUCT PAGE
     router.get('/new', authUser, wrapAsync(async (req, res) => {
@@ -26,22 +26,27 @@ const Product = require('../models/products');
     }));
     //CREATE PRODUCT ACTION
     router.put('/new', authUser, wrapAsync(async (req, res, next) => {
-        const vProduct = prSchema.validate(req.body);
+        let dat = req.body;
+        dat.product.seller = req.user._id;
+        dat.product.created = Date.now();
+        console.dir(dat)
+        console.log("create product")
+        const vProduct = prSchema.validate(dat);
         if (vProduct.error) {
-            req.flash('data',req.body.product);
+            req.flash('data',dat.product);
             req.flash('failure',"Error adding product! \n"+vProduct.error);
             res.redirect('/store/new');
         } else {
-            const product = new Product(req.body.product);
-            await product.save();
+            const newp = new Product(dat.product);
+            await newp.save();
             req.flash('success','Product has been created!');
-            res.redirect(`/store/${product._id}`)
+            res.redirect(`/store/${newp._id}`)
         }
     }));
     //VIEW PRODUCT
     router.get('/:id', wrapAsync(async (req, res, next) => {
         const { id } = req.params;
-        const product = await Product.findById(id).populate('reviews');
+        const product = await Product.findById(id).populate('reviews').populate('userId');
         if (!product) {
             hError("Error getting product!");
             next(new exError(404,"Product not found!"));
@@ -76,21 +81,23 @@ const Product = require('../models/products');
     //POST REVIEW
     router.post('/:id/review', authUser, wrapAsync(async (req, res, next) => {
         const { id } = req.params;
+        let dat = req.body;
+        dat.review.userId = req.user._id;
+        dat.review.created = Date.now();
 
-        const vReview = reviewSchema.validate(req.body);
-        console.log("REQ BODY:")
-        console.dir(req.body)
+        const vReview = reviewSchema.validate(dat);
         if (vReview.error) {
             hError("Review failed validation! DETAILS:\n"+vReview.error)
             const msg = vReview.error.details.map(el => el.message).join(',')
             
             req.flash('failure','Unable to submit your review! Please try again. ERROR: '+msg);
-            req.flash('data',req.body.review);
+            req.flash('data',dat.review);
             res.redirect(`/store/${id}`);
         } else {
             const product = await Product.findById(id);
-            const review = new Review(req.body.review);
-            product.reviews.push(review);
+            const review = new Review(dat.review);
+
+            product.reviews.unshift(review);
             await review.save();
             await product.save();
             req.flash('success','Your review has been submitted!');

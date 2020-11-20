@@ -2,7 +2,7 @@
 <div class="mcontent col-md-10 col-lg-10 col-xl-10 text-center bg-white row justify-content-center align-content-center m-0">
     <div class="col-md-12 col-lg-11 col-xl-10 mt-3">
         <h2 class="col-12 mb-3">Post by <%=post.username%></h2>
-        <div class="border psContainer row justify-content-center mb-5 p-5">
+        <div class="border psContainer row justify-content-center mb-5 p-5 rounded">
             <%=post.comment%>
         </div>
     </div>
@@ -28,22 +28,24 @@
         <% 
             for (let comment of post.comments) {
         %> 
-            <div class="border col-12 text-left mb-2">
+            <div class="border col-12 text-left mb-2 rounded">
                 <div class="order-first mt-2">
-                    <img src="/img/avatar.png" class="userAva border rounded mr-2 img-fluid rounded float-left">
+                    <img src="/img/avatar.png" class="userAva border rounded mr-2 img-fluid float-left">
                 </div>
                 <div class="col-12">
                     <b><%=comment.username%></b>
                 </div>
-                <div class="col-10 m-0">
+                <div class="col-10 m-0 pb-4">
                     <%=comment.comment%>
                 </div>
+                <%if (typeof currentUser !== "undefined") {if (typeof comment.userId !== "undefined") {if (comment.userId.equals(currentUser._id)) {%>
                 <div class="row justify-content-start align-content-end">
-                    <a class="col-2 btn btn-light px-1 py-0 mr-2 my-1" href="/post/<%=post._id%>/<%=comment._id%>/edit">Edit</a>
+                    <a class="col-2 btn btn-light px-1 py-0 ml-2 mr-2 my-1" href="/post/<%=post._id%>/<%=comment._id%>/edit">Edit</a>
                     <form class="col-2 m-0 p-0" action="/post/<%=post._id%>/<%=comment._id%>?_method=DELETE" method="post">
                         <button class="col-12 btn btn-light px-1 py-0 mr-2 my-1" type="submit" name="delete" value="delete">Delete</button>
                     </form>
                 </div>
+                <% }}}; %>
             </div>
         <% }; %> 
     </div>

@@ -3,13 +3,12 @@ const router = express.Router()
 
 //Schema validations
 const Joi = require('joi')
-const { prSchema, psSchema, commentSchema, reviewSchema } = require('../models/schemavs')
+const { psSchema, commentSchema } = require('../models/schemavs');
 
 //Import utils
 const { exError,hError,hDebug,hInfo,authUser,authRole,wrapAsync } = require('../utils/utils')
 
 //Models
-const { User,Group } = require('../models/users');
 const Comment = require('../models/comments');
 const Post = require('../models/posts');
 
@@ -21,7 +20,7 @@ const Post = require('../models/posts');
     //VIEW POST
     router.get('/:id',authUser, wrapAsync(async (req, res, next) => {
         const { id } = req.params;
-        const post = await Post.findById(id).populate('comments');;
+        const post = await Post.findById(id).populate('comments').populate('userId');
         if (!post) {
             hError("Error getting post!");
             next(new exError(404,"Post not found!"));
@@ -31,15 +30,18 @@ const Post = require('../models/posts');
     }));
     //CREATE POST
     router.post('/',authUser, wrapAsync(async (req, res, next) => {
-        console.log("Sending post!");
-        const vPost = psSchema.validate(req.body);
+        let dat = req.body;
+        dat.post.userId = req.user._id;
+        dat.post.created = Date.now();
+        
+        const vPost = psSchema.validate(dat);
         console.dir(vPost.error);
         if (vPost.error) {
             hError("Error creating post!");
             next(new exError(500,"Error making post! \n"+vPost.error.details[0].message));
         } else {
             hDebug("No error!");
-            const post = new Post(req.body.post);
+            const post = new Post(dat.post);
             await post.save();
             req.flash('success','Post has been created!');
             res.redirect(`/post`);
@@ -70,20 +72,25 @@ const Post = require('../models/posts');
 //====POST COMMENTS
     //CREATE COMMENT
     router.post('/:id/comment',authUser, wrapAsync(async (req, res, next) => {
+        let dat = req.body;
+        dat.comment.userId = req.user._id;
+        dat.comment.created = Date.now();
+
+
         const { id } = req.params;
-        const vComment = commentSchema.validate(req.body);
+        const vComment = commentSchema.validate(dat);
         //Validate input matches schema
         if (vComment.error) {
             hError("Comment failed validation! DETAILS:\n"+vComment.error)
             const msg = vComment.error.details.map(el => el.message).join(',')
             
             req.flash('failure','Unable to submit your comment! Please try again. ERROR: '+msg);
-            req.flash('data',req.body.comment);
+            req.flash('data',dat.comment);
             res.redirect(`/post/${id}`);
         } else {
             const post = await Post.findById(id);
-            const comment = new Comment(req.body.comment);
-            post.comments.push(comment);
+            const comment = new Comment(dat.comment);
+            post.comments.unshift(comment);
             await comment.save();
             await post.save();
             req.flash('success','Comment has been posted!');

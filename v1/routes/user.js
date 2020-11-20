@@ -11,7 +11,7 @@ const { exError,hError,hDebug,hInfo,authUser,wrapAsync } = require('../utils/uti
 //const bcrypt = require('bcrypt');
 
 //Models
-const { User,Group } = require('../models/users');
+const { User, Group } = require('../models/users');
 
 
 //====USER MANAGEMENT START
@@ -42,19 +42,24 @@ const { User,Group } = require('../models/users');
                 const grp = await Group.findOne({name: "Member"});
                 const udata = new User({username: rdat.username,email: rdat.email, date: Date.now()});
                 udata.groups.push(grp);
-                User.register(udata, rdat.password);
-                req.session.userId = udata._id;
-                req.flash('success','Account created!');
-                res.redirect(`/`);
+                const ruser = await User.register(udata, rdat.password);
+                req.login(ruser, err => {
+                    if (err) return next(err);
+                    req.flash('success','Account created!');
+                    res.redirect(`/`);
+                });
             };
         };
     }));
     router.get('/login', (req, res) => {
+        if (req.session.returnURL) {delete req.session.returnURL};
         res.render('login', {title:"Sign in"});
     });
     router.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), wrapAsync(async (req,res) => {
         req.flash('success','Successfully logged in.');
-        res.redirect('/');
+        const rurl = req.session.returnURL || '/';
+        delete req.session.returnURL;
+        res.redirect(rurl);
     }));
     router.get('/logout', (req, res) => {
         if (req.isAuthenticated()) {

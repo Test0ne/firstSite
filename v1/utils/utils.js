@@ -43,6 +43,7 @@ module.exports.setUser = function (req,res,next) {
 };
 module.exports.authUser = function (req,res,next) {
     if (!req.isAuthenticated()) {
+        req.session.returnURL = req.originalUrl;
         return res.status(403).render(
             'login',
             {

@@ -59,18 +59,20 @@
                 <div class="col-12">
                     <b><%=review.username%></b>
                 </div>
-                <div class="col-10 m-0 text-warning font-weight-light blockquote">
-                    <%=review.rating%> out of 5 stars
+                <div class="col-12 m-0 text-warning font-weight-normal">
+                    <%=review.rating%> / 5
                 </div>
                 <div class="col-10 m-0">
                     <%=review.comment%>
                 </div>
+                <%console.log("Login check");if (typeof currentUser !== "undefined") {if (typeof review.userId !== "undefined") {if (review.userId.equals(currentUser._id)) {%>
                 <div class="row justify-content-start align-content-end">
                     <a class="col-2 btn btn-light px-1 py-0 mr-2 my-1" href="/store/<%=product._id%>/<%=review._id%>/edit">Edit</a>
                     <form class="col-2 m-0 p-0" action="/store/<%=product._id%>/<%=review._id%>/edit?_method=DELETE" method="post">
                         <button class="col-12 btn btn-light px-1 py-0 mr-2 my-1" type="submit" name="delete" value="delete">Delete</button>
                     </form>
                 </div>
+                <% }}}; %>
             </div>
         <% }; %> 
     </div>

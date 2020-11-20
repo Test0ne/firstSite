@@ -39,7 +39,11 @@ const productSchema = new Schema({
     reviews: [{
         type: Schema.Types.ObjectId,
         ref: 'reviews'
-    }]
+    }],
+    seller: {
+        type: Schema.Types.ObjectId,
+        ref: 'Users'
+    }
 });
 productSchema.post('findOneAndDelete', async function(doc) {
     console.log("FindOneDelete Detected!")
