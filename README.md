@@ -1,27 +1,13 @@
-# TODO PRIORITY
-User registration
-User authentication
-Groups
-Session
-Cookies
-Authentication
-Authorization
-Maps 
-Cluster maps
-Security checks
-Flash 
-
-
-
 # firstSite
-My first website from scratch, created with Node.js, JavaScript, HTML, CSS, Express, Mongoose, 
+My first website with Node JS.
+This github contains the entire web server.
 
-This project includes the server-side files for my first website.
+WI.
 
 *The commands below assume you are running bash from the v1 directory*
 
 **Start server**
->node index.js
+>node main.js
 
 **Seed database with default groups**
 >node seeds/seed_groups.js
@@ -35,3 +21,11 @@ This project includes the server-side files for my first website.
 =======
 >node seeds/seed_products.js
 >>>>>>> a4bd20dbe8419ac29ab3449412ab92e5f030e5cc
+
+
+# TODO PRIORITY
+Cookies
+Maps 
+Cluster maps
+Security checks 
+Purchase API
