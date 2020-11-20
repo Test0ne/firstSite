@@ -23,7 +23,8 @@ const userSchema = new Schema({
         type: Array,
         ref: 'groups',
         required: true
-    }]
+    }],
+    active: Boolean
 });
 const groupSchema = new Schema({
     name: {

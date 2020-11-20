@@ -35,20 +35,20 @@
                         <h2>Name</h2>
                         <%=result.show.name%>
                     </li>
-                    <%};if (result.show.network) {%>
+                    <%};if (result.show.network && result.show.network.name) {%>
                     <li class="list-group-item my-1">
                         <h2>Network</h2>
-                        <%=result.show.network%>
+                        <%=(result.show.network && result.show.network.name) ? result.show.network.name:'Unknown'%>
                     </li>
-                    <%};if (result.show.rating.average) {%>
+                    <%};let trat= result.show.rating.average;if (trat) {%>
                     <li class="list-group-item my-1">
                         <h2>Rating</h2>
-                        <%=result.show.rating.average%>
+                        <%=trat > 0 ? trat:'Insufficient data'%>
                     </li>
                     <%};if (result.show.summary) {%>
                     <li class="list-group-item my-1">
                         <h2>Summary</h2>
-                        <%=result.show.summary%>
+                        <%-result.show.summary%>
                     </li>
                     <%};%>
                 </ul>

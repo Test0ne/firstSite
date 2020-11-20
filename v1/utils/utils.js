@@ -31,14 +31,15 @@ module.exports.routeCatch = function (err, req, res, next) {
 //User utils
 //===========
 module.exports.setUser = function (req,res,next) {
-    console.log("Set user running");
-    //setUser
-    const userid = req.session.userId;
-    if (userid) {res.locals.userId = userid;console.log("Set user id: "+userid)};
-    const username = req.session.userName;
-    if (username) {res.locals.userName = username;console.log("Set username: "+username)};
+    //Set user info
+    const ui = req.session.userId;
+    const un = req.session.userName;
+    const ug = req.session.userGroup;
+    if (ui) {res.locals.userId = ui};
+    if (un) {res.locals.userName = un};
+    if (ug) {res.locals.userGroup = ug};
 
-    //setFlash
+    //Set user page flash
     res.locals.data = req.flash('data');
     res.locals.success = req.flash('success');
     res.locals.failure = req.flash('failure');
@@ -53,10 +54,9 @@ module.exports.authUser = function (req,res,next) {
 }
 module.exports.authRole = function (group) {
     return (req,res,next) => {
-        if (req.user.group !== group) {
-            next(new exError(401,"Access denied. WTF?."))
-        } else {
-            next()
-        }
+        if (req.session.userGroup !== group) {
+            return (new exError(401,"Access denied. WTF?."))
+        };
+        next()
     }
 }

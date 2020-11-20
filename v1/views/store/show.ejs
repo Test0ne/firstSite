@@ -23,6 +23,7 @@
             <button name="<%=product._id%>" class="border btn btn-light px-1 py-0 mr-2 my-1">Add to cart</button>
         </div>
     </div>
+    <%if (typeof userName !== "undefined") {%>
     <div class="pContainer col-12">
         <h4 class="text-center py-2">
             Add a review
@@ -34,9 +35,9 @@
             </div>
             <div>
                 <label for="rating">Rating</label>
-                <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating">
+                <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating" value=3>
             </div>
-            <input type="hidden" name="review[username]" value="Default">
+            <input type="hidden" name="review[username]" value="<%=userName%>">
             <div class="form-group mb-5">
                 <button class="btn btn-success">Post review</button>
             </div>
@@ -45,6 +46,7 @@
             </div>
         </form>
     </div>
+    <%};%>
     <h2 class="col-12 mb-3"><%= product.reviews.length > 0 ? 'All reviews ('+(product.reviews.length)+')' : 'No reviews'%></h2>
     <div class="psContainer col-10 row justify-content-center mb-5">
         <% 
@@ -56,6 +58,9 @@
                 </div>
                 <div class="col-12">
                     <b><%=review.username%></b>
+                </div>
+                <div class="col-10 m-0 text-warning font-weight-light blockquote">
+                    <%=review.rating%> out of 5 stars
                 </div>
                 <div class="col-10 m-0">
                     <%=review.comment%>

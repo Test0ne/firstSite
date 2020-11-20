@@ -18,11 +18,6 @@ const postSchema = new Schema({
     }]
 });
 postSchema.post('findOneAndDelete', async function(doc) {
-    console.log("FindOneDelete Detected!")
-    if (doc) {
-        await Comment.deleteMany({
-            _id: {$in: doc.comments}
-        })
-    }
-})
+    if (doc) {await Comment.deleteMany({_id: {$in: doc.comments}})};
+});
 module.exports = mongoose.model('Posts',postSchema);
