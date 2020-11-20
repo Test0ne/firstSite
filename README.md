@@ -2,7 +2,7 @@
 My first website with Node JS.
 This github contains the entire web server.
 
-WI.
+WORK IN PROGRESS
 
 *The commands below assume you are running bash from the v1 directory*
 
