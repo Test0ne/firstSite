@@ -8,7 +8,8 @@ const morgan = require('morgan');
 const ejsMate = require('ejs-mate');
 const mongoose = require('mongoose');
 const passport = require('passport');
-const flash = require('connect-flash');
+const LocalStrategy = require('passport-local');
+const flash = require('req-flash');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const methodOverride = require('method-override');
@@ -17,7 +18,7 @@ const methodOverride = require('method-override');
 const secretTemp = 'secretKeyExample2';
 const sessionConfig = {
     secret: secretTemp,
-    /**store: '',*/
+    /**store: '',*/ 
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -25,7 +26,7 @@ const sessionConfig = {
         expires: Date.now() + (1000 * 60 * 60 * 24) * 7,
         maxAge: Date.now() + (1000 * 60 * 60 * 24) * 7
     }
-}
+};
 
 //Import utils
 const { exError,hError,hDebug,hInfo,setUser,authUser,authRole,wrapAsync,routeCatch } = require('./utils/utils')
@@ -49,14 +50,12 @@ app.set('view engine', 'ejs');
 
 //Add Middleware
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cookieParser(secretTemp));
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use(methodOverride('_method'));
-app.use(cookieParser(secretTemp));
 app.use(session(sessionConfig));
 app.use(morgan('dev'));
-app.use(flash());
-app.use(setUser);
 
 //Init and configure passport auth
 app.use(passport.initialize());
@@ -65,6 +64,8 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.use(flash());
+app.use(setUser);
 
 
 //Setup routes

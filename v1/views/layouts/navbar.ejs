@@ -1,52 +1,28 @@
 <div class="row m-0">
     <nav class="col-12 navbar navbar-expand-md navbar-light bg-light rounded-top mb-1">
-        <!-- Mobile dropdown -->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <!-- Navbar -->
-        <a class="navbar-brand order-first col-4 col-sm-3 col-md-2 col-xl-2" href="/">Brand name</a>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav align-items-center">
-                <li class="nav-item <%= (title == "Home") ? 'border rounded' : ''%>">
-                    <a class="nav-link btn" href="/">Home</a>
-                </li>
-                <li class="nav-item <%= (title == "Store") ? 'border rounded' : ''%>">
-                    <a class="nav-link btn" href="/store">Store</a>
-                </li>
-                <li class="nav-item <%= (title == "Posts") ? 'border rounded' : ''%>">
-                    <a class="nav-link btn" href="/post">Posts</a>
-                </li>
-                <li class="nav-item <%= (title == "Game") ? 'border rounded' : ''%>">
-                    <a class="nav-link btn" href="/game">Game</a>
-                </li>
-                <li class="nav-item <%= (title == "Shows") ? 'border rounded' : ''%>">
-                    <a class="nav-link btn" href="/shows">TV search</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <%if (typeof userName == 'undefined') {%>
-                            <a class="dropdown-item" href="/login">Sign in</a>
-                        <%} else {%>
-                            <a class="dropdown-item" href="/logout">Sign out</a>
-                        <%}%>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Profile</a>
-                    </div>
-                </li>
-                <%if (typeof userName == 'undefined') {%>
-                <li class="nav-item">
-                    <a class="btn btn-secondary mx-2" href="/register">Sign Up</a>
-                </li>
-                <% }%>
-                <!-- <li class="nav-item">
-                    <form class="form-inline my-0">
-                        <input class="form-control py-2 col-md-4 col-lg-8" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn ml-2 btn-outline-success" type="submit">Search</button>
-                    </form>
-                </li> -->
-            </ul>
+        <div class="container-fluid">
+            <!-- Navbar -->
+            <a class="navbar-brand" href="/">Brand name</a>
+            <!-- Mobile dropdown -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Nav links -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="navbar-nav">
+                    <a class="nav-link btn <%= (title == "Home") ? 'border rounded' : ''%>" href="/">Home</a>
+                    <a class="nav-link btn <%= (title == "Store") ? 'border rounded' : ''%>" href="/store">Store</a>
+                    <a class="nav-link btn <%= (title == "Posts") ? 'border rounded' : ''%>" href="/post">Posts</a>
+                    <a class="nav-link btn <%= (title == "Game") ? 'border rounded' : ''%>" href="/game">Game</a>
+                    <a class="nav-link btn <%= (title == "Shows") ? 'border rounded' : ''%>" href="/shows">TV search</a>
+                </div>
+                <div class="navbar-nav ml-auto">
+                    <a class="nav-link btn" href="/login">Sign in</a>
+                    <a class="nav-link btn" href="/logout">Sign out</a>
+                    <a class="nav-link btn" href="/register">Sign Up</a>
+                </div>
+            </div>
         </div>
     </nav>
 </div>

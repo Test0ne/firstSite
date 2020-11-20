@@ -15,7 +15,7 @@ const Post = require('../models/posts');
 
 //====USER POSTS start
     //ALL POSTS
-    router.get('/',authUser, wrapAsync(async (req, res) => {
+    router.get('/', wrapAsync(async (req, res) => {
         Post.find().then(posts=>res.render('post', { title:"Posts", posts }));
     }));
     //VIEW POST

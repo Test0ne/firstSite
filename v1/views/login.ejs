@@ -2,7 +2,7 @@
 <div id="signup">
     <h1 class="justify-content-around text-center py-5">
         <%try {%>
-            <%= message !== null ? message : 'Sign in'%>
+            <%-message !== null ? message : 'Sign in'%>
         <%} catch {%>
             Sign in
         <%}%>
@@ -10,11 +10,11 @@
     <form class="validate-form row border rounded p-4 text-left" action="/login" method="POST" novalidate>
         <div class="form-group col-12 pb-4">
             <label for="username" class="mb-2">Username</label>
-            <input type="text" class="form-control" name="login[username]" id="username" placeholder="Username" required>
+            <input type="text" class="form-control" name="username" id="username" placeholder="Username" required>
         </div>
         <div class="form-group col-12 pb-4">
             <label for="password" class="mb-2">Password</label>
-            <input type="password" class="form-control" name="login[password]" id="password" placeholder="Password" required>
+            <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
         </div>
         <div class="custom-control custom-checkbox m-auto p-auto pb-4">
             <input type="checkbox" class="custom-control-input" id="customCheck1">

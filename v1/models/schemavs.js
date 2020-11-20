@@ -1,4 +1,6 @@
-const Joi = require('joi')
+const Joi = require('joi');
+const passRegex = /[!@#$%^&*(),.?":{}|<>'`/\\]/;
+
 module.exports.prSchema = Joi.object({
     product: Joi.object({
         name: Joi.string().required(),
@@ -19,8 +21,17 @@ module.exports.psSchema = Joi.object({
 });
 module.exports.uSchema = Joi.object({
     register: Joi.object({
-        username: Joi.string().required(),
-        password: Joi.string().required().min(8).max(32),
+        username: Joi.string().required().min(3).max(16).custom((v,h) => {
+            return passRegex.test(v) ? h.error('any.invalid') : v
+        }).messages({
+            "string.min": 'Username is too short!<br/>MINIMUM length is <b>{{#limit}}</b>.',
+            "string.max": 'Username is too long!<br/>MAXIMUM length is <b>{{#limit}}</b>.',
+            "any.invalid": 'Username contains symbols.'
+        }),
+        password: Joi.string().required().min(8).max(32).messages({
+            "string.min": 'Password MINIMUM length is <b>{{#limit}}</b>.',
+            "string.max": 'Password MAXIMUM length is <b>{{#limit}}</b>.'
+        }),
         email: Joi.string().required()
     }).required()
 });

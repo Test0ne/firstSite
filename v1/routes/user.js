@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const passportLocalMongoose = require('passport-local-mongoose');
+const passport = require('passport');
 
 //Schema validations
 const Joi = require('joi');
@@ -8,7 +8,7 @@ const { uSchema } = require('../models/schemavs');
 
 //Import utils
 const { exError,hError,hDebug,hInfo,authUser,wrapAsync } = require('../utils/utils');
-const bcrypt = require('bcrypt');
+//const bcrypt = require('bcrypt');
 
 //Models
 const { User,Group } = require('../models/users');
@@ -19,11 +19,15 @@ const { User,Group } = require('../models/users');
         res.render('register', {title:"Sign up"});
     });
     router.post('/register', wrapAsync(async (req, res) => {
-        const vUser = uSchema.validate(req.body);
+        let verErr = uSchema.validate(req.body).error;
         let rdat = req.body.register;
-        if (vUser.error) {
-            req.flash('data',req.body.register);
-            req.flash('failure','Failed to create account!');
+        console.log('rdat')
+        console.dir(rdat)
+        if (verErr) {
+            verErr = verErr.details;
+            verErr = (!verErr ? 'Please try again.' : verErr[0].message);
+            req.flash('data',rdat);
+            req.flash('failure','Failed to create an account!<br/>'+verErr);
             res.redirect('/register');
         } else {
             if (await User.findOne({$or:[{username: rdat.username},{email: rdat.username}]})) {
@@ -36,9 +40,9 @@ const { User,Group } = require('../models/users');
                 res.redirect('/register');
             } else {
                 const grp = await Group.findOne({name: "Member"});
-                const udata = new User({username: rdat.username,email: rdat.email,date: Date.now(),groups: ['Member'],});
+                const udata = new User({username: rdat.username,email: rdat.email, date: Date.now()});
                 udata.groups.push(grp);
-                const newUser = User.register(udata, rdat.password);
+                User.register(udata, rdat.password);
                 req.session.userId = udata._id;
                 req.flash('success','Account created!');
                 res.redirect(`/`);
@@ -48,39 +52,17 @@ const { User,Group } = require('../models/users');
     router.get('/login', (req, res) => {
         res.render('login', {title:"Sign in"});
     });
+    router.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), wrapAsync(async (req,res) => {
+        req.flash('success','Successfully logged in.');
+        res.redirect('/');
+    }));
     router.get('/logout', (req, res) => {
-        req.session.userId = undefined;
-        req.session.userName = undefined;
-
-        res.locals.userName = undefined;
-        res.locals.userId = undefined;
-        
+        if (req.isAuthenticated()) {
+            req.logout();
+            req.flash('success','Successfully logged out.');
+        };
         res.redirect('/');
     });
-    router.post('/login', wrapAsync(async (req,res) => {
-        const {username, password} = req.body.login;
-        const fUser = await User.findOne({$or:[{username},{email: username}]});
-        if (fUser) {
-            bcrypt.compare(password, fUser.password, async (e,r)=>{
-                if (r) {
-                    hDebug("/login compare success!");
-                    req.flash('success','Login success!');
-                    req.session.userName = fUser.username;
-                    req.session.userId = fUser._id;
-                    res.redirect('/');
-                } else {
-                    hDebug("/login ompare fail!");
-                    req.flash('failure','Wrong username or password, please try again.');
-                    req.flash('data',req.body.login);
-                    res.redirect('/login');
-                };
-            });
-        } else {
-            req.flash('failure','Wrong username or password, please try again.');
-            req.flash('data',req.body.login);
-            res.redirect('/login');
-        };
-    }));
 //====USER MANAGEMENT END
 
 module.exports = router;

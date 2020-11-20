@@ -1,6 +1,6 @@
 <%- layout('/layouts/boilerplate')%>
 <div class="col-md-12 col-lg-11 col-xl-10">
-    <%if (typeof userName !== "undefined") {%>
+    <%if (typeof currentUser !== "undefined") {%>
     <div class="pContainer">
         <h1 class="text-center py-5">
             Post message test
@@ -10,7 +10,7 @@
                 <label for="commentBox" name="msgboxl">Message</label>
                 <input class="form-control msgbox" name="post[comment]" type="text" id="commentBox" placeholder="Type here">
             </div>
-            <input type="hidden" name="post[username]" value="<%=userName%>">
+            <input type="hidden" name="post[username]" value="<%=currentUser.username%>">
             <div class="form-group col-6 row align-self-center mb-5">
                 <button class="btn btn-success align-self-end col-12">Post message</button>
             </div>

@@ -3,7 +3,7 @@
 <h3><small class="text-secondary font-weight-light">Created with JavaScript, Node.js, Express, and MongoDB.</small></h3>
 <hr>
 <div class="alert alert-success alert-dismissible fade show">
-    <h2 class="alert-heading">Hello<%= typeof userName !== 'undefined' ? ', '+userName : ''%>!</h2>
+    <h2 class="alert-heading">Hello<%= typeof currentUser !== 'undefined' ? ', '+currentUser.username : ''%>!</h2>
     Please let us know if you find any issues.
     <button type="button" class="btn-close" data-dismiss="alert" aria-label="close"><span aria-hidden="true"></span></button>
 </div>

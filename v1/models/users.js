@@ -3,28 +3,15 @@ const Schema = mongoose.Schema
 const passportLocalMongoose = require('passport-local-mongoose')
 
 const userSchema = new Schema({
-    username: {
-        type: String,
-        required: true
-    },
     email: {
         type: String,
         required: true
     },
-    password: {
-        type: String,
-        required: true
-    },
-    created: {
-        type: Date,
-        required: true
-    },
+    created: Date,
     groups: [{
         type: Array,
-        ref: 'groups',
-        required: true
-    }],
-    active: Boolean
+        ref: 'groups'
+    }]
 });
 const groupSchema = new Schema({
     name: {

@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/firstSite', {useNewUrlParser: true, useUnifiedTopology: true})
-    .then(()=>{hDebug("Connected to MongoDB.")})
-    .catch(e => hError("Error connecting to MongoDB: "+e));
+    .then(()=>{console.log("Connected to MongoDB.")})
+    .catch(e => console.log("Error connecting to MongoDB: "+e));
 
-const Group = require('../models/groups');
+const { Group } = require('../models/users');
 Group.insertMany([
     {
         name: "Admin",

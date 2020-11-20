@@ -9,7 +9,6 @@ const { prSchema, psSchema, commentSchema, reviewSchema } = require('../models/s
 const { exError,hError,hDebug,hInfo,authUser,authRole,wrapAsync } = require('../utils/utils')
 
 //Models
-const { User,Group } = require('../models/users');
 const Review = require('../models/reviews');
 const Product = require('../models/products');
 
@@ -29,7 +28,9 @@ const Product = require('../models/products');
     router.put('/new', authUser, wrapAsync(async (req, res, next) => {
         const vProduct = prSchema.validate(req.body);
         if (vProduct.error) {
-            res.render('store/create', {title:"Create new product",error:"Error adding product! \n"+vProduct.error,data:req.body.product})
+            req.flash('data',req.body.product);
+            req.flash('failure',"Error adding product! \n"+vProduct.error);
+            res.redirect('/store/new');
         } else {
             const product = new Product(req.body.product);
             await product.save();
