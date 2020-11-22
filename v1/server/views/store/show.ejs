@@ -1,0 +1,94 @@
+<%- layout('/layouts/boilerplate')%>
+<%if (typeof product == "undefined") {%>
+    <div class="py-5"><h1 class="py-5">Unable to fetch product data. Please try again later.</h1></div>
+<%} else {%>
+    <div class="col-md-12 col-lg-11 col-xl-10 mt-3">
+        <h2 class="col-12 my-3"><%=product.name%></h2>
+        <img src="<%=product.image%>" class="pImgFull border rounded">
+        <%if (product.rating) {%>
+            <div class="d-flex justify-content-center mt-4">
+                <p class="starability-result" data-rating="<%=product.rating%>"></p><span class="font-weight-light ml-1">(<%=product.ratings%>)</span>
+            </div>
+        <% }; %>
+        <h2 class="col-12 mb-3">Description</h2>
+        <p class="border rounded p-2 m-2">
+            <%=product.description%>
+        </p>
+        <h4 class="font-weight-normal"><small class="text-success">Price: </small>$<%=product.price%></h4>
+        <div class="col-12">
+            <button name="<%=product._id%>" class="border btn btn-light px-1 py-0 mr-2 my-1">Add to cart</button>
+        </div>
+    </div>
+    <%if (typeof currentUser !== "undefined") {%>
+    <div class="pContainer col-12">
+        <hr>
+        <h4 class="text-center py-2">
+            Add a review
+        </h4>
+        <form id="commentForm" class="validate-form form-group flex-column justify-content-center align-content-center" action="/store/<%=product._id%>" name="/store/<%=product._id%>" method="post" novalidate>
+            <div class="d-flex justify-content-center mb-3">
+                <fieldset class="starability-basic">
+                    <legend>Rating:</legend>
+                    <input class="form-control" type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
+                    <input class="form-control" type="radio" id="second-rate1" name="review[rating]" value="1" />
+                    <label class="form-label" for="second-rate1" title="Terrible">1 star</label>
+                    <input class="form-control" type="radio" id="second-rate2" name="review[rating]" value="2" />
+                    <label class="form-label" for="second-rate2" title="Not good">2 stars</label>
+                    <input class="form-control" type="radio" id="second-rate3" name="review[rating]" value="3" />
+                    <label class="form-label" for="second-rate3" title="Average">3 stars</label>
+                    <input class="form-control" type="radio" id="second-rate4" name="review[rating]" value="4" />
+                    <label class="form-label" for="second-rate4" title="Very good">4 stars</label>
+                    <input class="form-control" type="radio" id="second-rate5" name="review[rating]" value="5" />
+                    <label class="form-label" for="second-rate5" title="Amazing">5 stars</label>
+                </fieldset>
+            </div>
+            <div class="pb-4">
+                <label class="form-label" for="comment" name="msgboxl">Message</label>
+                <textarea class="form-control msgbox" type="text" id="comment" placeholder="Type here" name="review[comment]" required></textarea>
+            </div>
+            <input type="hidden" name="review[username]" value="<%=currentUser.username%>">
+            <div class="form-group mb-5">
+                <button class="btn btn-success">Post review</button>
+            </div>
+        </form>
+        
+        <hr>
+    </div>
+    <%};%>
+    <h2 class="col-12 mb-3"><%= product.reviews.length > 0 ? 'All reviews ('+(product.reviews.length)+')' : 'No reviews'%></h2>
+    <div class="psContainer col-10 row justify-content-center mb-5">
+        <% 
+            for (let review of product.reviews) {
+        %> 
+            <div class="container">
+                <div class="row border rounded mb-3 p-2">
+                    <div class="col-12 text-left">
+                        <img src="/img/avatar.png" class="userAva mr-2 img-fluid rounded float-left">
+                        <div class="row">
+                            <b><%=review.username%></b>
+                            <p class="starability-result " data-rating="<%=review.rating%>"></p>
+                        </div>
+                    </div>
+                    <div class="col-12 text-left">
+                        <%=review.comment%>
+                    </div>
+                    <%if (typeof currentUser !== "undefined") {if (typeof review.userId !== "undefined") {if (review.userId.equals(currentUser._id)) {%>
+                    <div class="row justify-content-start align-content-end">
+                        <a class="col-2 btn btn-light px-1 py-0 mr-2 my-1" href="/store/<%=product._id%>/<%=review._id%>">Edit</a>
+                        <form class="col-2 m-0 p-0" action="/store/<%=product._id%>/<%=review._id%>?_method=DELETE" method="post">
+                            <button class="col-12 btn btn-light px-1 py-0 mr-2 my-1" type="submit" name="delete" value="delete">Delete</button>
+                        </form>
+                    </div>
+                    <% }}}; %>
+                </div>
+            </div>
+        <% }; %> 
+    </div>
+<%}%>
+<nav class="col-12 mt-4" aria-label="breadcrumb">
+    <ol class="breadcrumb col-12 justify-content-center">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/store">Store</a></li>
+        <li class="breadcrumb-item active"  aria-current="page">Product detail (<%=product.name%>)</li>
+    </ol>
+</nav>

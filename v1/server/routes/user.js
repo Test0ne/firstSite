@@ -7,7 +7,7 @@ const Joi = require('joi');
 const { uSchema } = require('../models/schemavs');
 
 //Import utils
-const { exError,hError,hDebug,hInfo,authUser,wrapAsync } = require('../utils/utils');
+const { exError,hError,hDebug,hInfo,authUser,wrapAsync } = require('../../utils');
 //const bcrypt = require('bcrypt');
 
 //Models
@@ -21,8 +21,6 @@ const { User, Group } = require('../models/users');
     router.post('/register', wrapAsync(async (req, res) => {
         let verErr = uSchema.validate(req.body).error;
         let rdat = req.body.register;
-        console.log('rdat')
-        console.dir(rdat)
         if (verErr) {
             verErr = verErr.details;
             verErr = (!verErr ? 'Please try again.' : verErr[0].message);

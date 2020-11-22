@@ -3,7 +3,7 @@ const router = express.Router()
 const axios = require("axios")
 
 //Import utils
-const {hDebug,authUser,wrapAsync} = require('../utils/utils')
+const {hDebug,authUser,wrapAsync} = require('../../utils')
 
 //====HOME + ABOUT
     router.get('/', (req, res) => {

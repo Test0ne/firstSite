@@ -5,29 +5,31 @@
     <form class="row justify-content-center" action="/store/<%=product._id%>/edit?_method=PUT" method="POST">
         <div class="border rounded col-12 m-1 p-1 py-4">
             <label class="col-6 font-weight-bold" for="name">Product Name</label>
-            <textarea class="col-md-6 col-sm-12 text-center" type="text" name="name" id="name" placeholder="product name"><%=product.name%></textarea>
+            <textarea class="col-md-6 col-sm-12 text-center" type="text" name="product[name]" id="name" placeholder="product name"><%=product.name%></textarea>
             <hr class="w-md-50 w-sm-100">
             <label class="col-md-3 col-sm-5 font-weight-bold" for="price">Price</label>
-            <input class="col-md-3 col-sm-5 text-center" type="number" id="price" name="price" placeholder="0" value="<%=product.price %>">
+            <input class="col-md-3 col-sm-5 text-center" type="number" id="price" name="product[price]" placeholder="0" value="<%=product.price %>">
             <hr class="w-md-50 w-sm-100">
             <label class="col-md-3 col-sm-5 font-weight-bold" for="stock">Stock</label>
-            <input class="col-md-3 col-sm-5 text-center" type="number" id="stock" name="stock" placeholder="0" value="<%=product.stock %>">
+            <input class="col-md-3 col-sm-5 text-center" type="number" id="stock" name="product[stock]" placeholder="0" value="<%=product.stock %>">
             <hr class="w-md-50 w-sm-100">
             <label class="col-md-3 col-sm-5 font-weight-bold" for="image">Image</label>
-            <input class="col-md-3 col-sm-5 text-center" type="text" id="image" name="image" placeholder="0" value="<%=product.image %>">
+            <input class="col-md-3 col-sm-5 text-center" type="text" id="image" name="product[image]" placeholder="0" value="<%=product.image %>">
             <label class="col-12" for="description">Description</label>
-            <textarea class="col-md-10 col-sm-12 text-center" name="description" id="description" cols="30" rows="10" class="col-12 text-center"><%=product.description%></textarea>
+            <textarea class="col-md-10 col-sm-12 text-center" name="product[description]" id="description" cols="30" rows="10" class="col-12 text-center"><%=product.description%></textarea>
         </div>
         <button class="col-6 mb-2 btn btn-primary my-2">Edit product</button>
-        <label class="col-12" for="name"><h3>Database Info</h3></label>
+        <label class="col-12" for=""><h3>Database Info</h3></label>
     </form>
     <div class="border rounded col-12 m-1 p-1 py-4">
         <label class="col-3" for="id">ID</label>
-        <input class="col-8 text-center" type="text" id="id" name="id" value="<%=product._id%>" disabled>
+        <input class="col-8 text-center" type="text" id="id" name="product[_id]" value="<%=product._id%>" disabled>
+        <label class="col-3" for="seller">Seller ID</label>
+        <input class="col-8 text-center" type="text" id="seller" name="product[seller]" value="<%=product.seller%>" disabled>
         <label class="col-3" for="rating">Rating</label>
-        <input class="col-8 text-center" type="number" id="rating" name="rating" placeholder="0" value="<%= product.rating %>" disabled>
+        <input class="col-8 text-center" type="number" id="rating" name="product[rating]" placeholder="0" value="<%= product.rating %>" disabled>
         <label class="col-3" for="ratings">Ratings</label>
-        <input class="col-8 text-center" type="number" id="ratings" name="ratings" placeholder="0" value="<%= product.ratings %>" disabled>
+        <input class="col-8 text-center" type="number" id="ratings" name="product[ratings]" placeholder="0" value="<%= product.ratings %>" disabled>
     </div>
     <form class="row justify-content-center" action="/store/<%=product._id%>/edit?_method=DELETE" method="POST">
         <button class="col-6 my-2 btn btn-danger">Delete product</button>

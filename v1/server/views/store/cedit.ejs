@@ -7,7 +7,7 @@
     <div class="border p-4 m-3">
         "<%=review.comment%>"
     </div>
-    <form action="/store/<%=product._id%>/<%=review._id%>/edit?_method=PATCH" method="post">
+    <form action="/store/<%=product._id%>/<%=review._id%>?_method=PATCH" method="post">
         <textarea name="comment" id="comment" class="col-12 text-center" cols="60" rows="5" ><%=review.comment%></textarea>
         <div>
             <button class="col-12 mb-2 btn btn-light">Edit</button>

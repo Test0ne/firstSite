@@ -29,10 +29,10 @@ const sessionConfig = {
 };
 
 //Import utils
-const { exError,hError,hDebug,hInfo,setUser,authUser,authRole,wrapAsync,routeCatch } = require('./utils/utils')
+const { exError,hError,hDebug,hInfo,setUser,authUser,authRole,wrapAsync,routeCatch } = require('./utils')
 
 //Import User model for passport
-const { User } = require('./models/users');
+const { User } = require('./server/models/users');
 
 //Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/firstSite', {
@@ -45,7 +45,7 @@ mongoose.connect('mongodb://localhost:27017/firstSite', {
 
 //Setup EJS render engine
 app.engine('ejs',ejsMate);
-app.set('views', path.join(__dirname, '/views'));
+app.set('views', path.join(__dirname, '/server/views'));
 app.set('view engine', 'ejs');
 
 //Add Middleware
@@ -69,11 +69,11 @@ app.use(setUser);
 
 
 //Setup routes
-const storeRoutes = require('./routes/store');
-const postRoutes = require('./routes/posts');
-const userRoutes = require('./routes/user');
-const testRoutes = require('./routes/tests');
-const mainRoutes = require('./routes/main');
+const storeRoutes = require('./server/routes/store');
+const postRoutes = require('./server/routes/posts');
+const userRoutes = require('./server/routes/user');
+const testRoutes = require('./server/routes/tests');
+const mainRoutes = require('./server/routes/other');
 app.use('',mainRoutes);
 app.use('/store',storeRoutes);
 app.use('/post',postRoutes);
@@ -85,7 +85,8 @@ app.use(routeCatch);
 
 //Catch invalid requests
 app.all('*', (req,res,next)=>{
-    next(new exError(404,"Page not found!"));
+
+    next(new exError(404,"Page not found: "+req.originalUrl));
 });
 
 //Start server

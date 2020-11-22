@@ -18,34 +18,22 @@
                         <%}%>
                     </a>
                     <a class="col-12 card-title pLink m-0 p-0 mt-2" href="/store/<%=product._id%>"><b class="m-0 p-0"><%=product.name%></b></a>
-                    <div class="card-text col-12 m-0 p-0">
+                    <div class="card-text col-12 m-0 my-2">
                         <div id="pDesc">
                             <%=product.description%>
                         </div>
-                        <div class="col-12 m-0">
-                            <%  var prat = product.rating
-                                if (prat) {
-                                    if (prat > 0) {
-                                        for(var i=0; i<Math.min(prat,5); i++) {
-                                            %>
-                                            <img src="/img/star.png" class="pRating m-0 p-0">
-                                        <%}
-                                    }
-                                }
-                            %>
+                        <div class="col-12 m-0 my-2">
+                            <p class="starability-result m-0" data-rating="<%=product.rating%>">
                             <span class="font-weight-light ml-1">(<%=product.ratings%>)</span>
                         </div>
-                        <div class="col-12 m-0 mb-4">
-                            $<%=product.price%>
-                        </div>
+                        <p class="col-12 m-0 my-2">$<%=product.price%></p>
                     </div>
-                    
-                    <div id="pBuy" class="align-self-end align-bottom">
+                    <div class="mt-auto col-12 p-0 m-0">
                         <button name="<%=product._id%>" class="border btn btn-light px-1 py-0 mr-2 my-1">Add to cart</button>
                         <a href="/store/<%=product._id%>"><button href="/store/<%=product._id%>" class="border btn btn-light px-1 py-0 mr-2 my-1">Details</button></a>
                         <%if (typeof currentUser !== "undefined") {if (typeof product.seller !== "undefined") {if (product.seller.equals(currentUser._id)) {%>
                             <a id="pEdit" href="/store/<%=product._id%>/edit"><button class="align-self-end btn btn-primary px-1 py-0 mr-2 my-1">Edit</button></a>
-                            <form class="inline-block m-0 p-0" action="/store/<%=product._id%>/<%=product._id%>?_method=DELETE" method="post">
+                            <form class="inline-block m-0 p-0" action="/store/<%=product._id%>?_method=DELETE" method="post">
                                 <button class="btn btn-light px-1 py-0 mr-2 my-1" type="submit" name="delete" value="delete">Delete</button>
                             </form>
                         <%};};};%>

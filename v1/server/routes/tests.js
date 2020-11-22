@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 //Import utils
-const { exError,hError,hDebug,hInfo,setUser,authUser,authRole,wrapAsync } = require('../utils/utils')
+const { exError,hError,hDebug,hInfo,setUser,authUser,authRole,wrapAsync } = require('../../utils')
 
 //Require sign in
 //router.use(authUser)
