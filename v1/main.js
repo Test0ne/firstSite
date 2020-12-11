@@ -28,8 +28,8 @@ const sessionConfig = {
     }
 };
 
-//Define Utils
-const { exError,hError,hDebug,hInfo,setUser,authUser,authRole,wrapAsync,routeCatch } = require('./utils');
+//Import utils
+const { exError,hError,hDebug,hInfo,setUser,authUser,authRole,wrapAsync,routeCatch } = require('./utils')
 
 //Import User model for passport
 const { User } = require('./server/models/users');
@@ -69,14 +69,12 @@ app.use(setUser);
 
 
 //Setup routes
-const manageRoutes = require('./server/routes/manage');
 const storeRoutes = require('./server/routes/store');
 const postRoutes = require('./server/routes/posts');
 const userRoutes = require('./server/routes/user');
 const testRoutes = require('./server/routes/tests');
 const mainRoutes = require('./server/routes/other');
 app.use('',mainRoutes);
-app.use('',manageRoutes);
 app.use('/store',storeRoutes);
 app.use('/post',postRoutes);
 app.use('',userRoutes);
@@ -86,9 +84,10 @@ app.use('',testRoutes);
 app.use(routeCatch);
 
 //Catch invalid requests
-app.all('*', wrapAsync(async (req,res,next)=>{
-    res.render('error',{title: '404 error!',status: 404,message: 'Page not found!!!'});
-}));
+app.all('*', (req,res,next)=>{
+
+    next(new exError(404,"Page not found: "+req.originalUrl));
+});
 
 //Start server
 app.listen(3000, () => {hInfo("LISTENING ON PORT 3000")});

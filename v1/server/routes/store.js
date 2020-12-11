@@ -1,118 +1,31 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
 //Utils
-const { exError,hError,validateProduct,isSeller,isReviewer,hDebug,authUser,authRole,wrapAsync } = require('../../utils');
-const multer = require('multer');
-const upload = multer({ dest: '../../public/img/ucontent'});  //Temp, final will use cloudinary/aws/etc
+const { exError,hError,validateProduct,isSeller,isReviewer,hDebug,authUser,authRole,wrapAsync } = require('../../utils')
 
 //Controller
 const products = require('../controllers/products');
 
 //Routes
 router.route('/')
-    .get(wrapAsync(async (req, res) => {
-        Product.find().populate('userId').then(products=>res.render('listings', { title:"Store", products }));
-    }));
+    .get(wrapAsync(products.allProducts));
 router.route('/new')
-    .get(authUser, isSeller, wrapAsync(async (req, res) => {
-        res.render('store/create', {title:"Create new listing"})
-    }))
-    .put(authUser, upload.single('image'), /**authRole("Admin"), */ wrapAsync(async (req, res) => {
-    let dat = req.body;
-    dat.product.seller = req.user._id;
-    dat.product.created = Date.now();
-    hDebug("Creating product");
-    console.dir(dat);
-    const vProduct = prSchema.validate(dat);
-    if (vProduct.error) {
-        req.flash('data',dat.product);
-        req.flash('failure',"Error adding product! \n"+vProduct.error);
-        res.redirect('/store/new');
-    } else {
-        const newp = new Product(dat.product);
-        await newp.save();
-        req.flash('success','Product has been created!');
-        res.redirect(`/store/${newp._id}`)
-    }
-}));
+    .get(authUser, /**authRole("Admin"), */ wrapAsync(products.createProductForm))
+    .put(authUser, /**authRole("Admin"), */ wrapAsync(products.createProduct));
 
 router.route('/:id/edit')
-    .get(authUser, isSeller, wrapAsync(async (req, res, next) => {
-        const { id } = req.params;
-        const product = await Product.findById(id);
-        res.render('store/edit',{ title:"Store", product });
-    }))
-    .put(authUser, isSeller, upload.single('image'), wrapAsync(async (req, res, next) => {
-        const { id } = req.params;
-        console.dir(req.body)
-        await Product.findByIdAndUpdate(id, req.body.product, {runValidators: true});
-        req.flash('success','Product has been edited!');
-        res.redirect("/store/"+id);
-    }))
-    .delete(authUser, isSeller, wrapAsync(deleteProduct = async (req, res) => {
-        const { id } = req.params;
-        const product = await Product.findByIdAndDelete(id);
-        req.flash('success',`Product '${product.name}' has been deleted!`);
-        res.redirect("/store");
-    }));
+    .get(authUser, isSeller, wrapAsync(products.editProductForm))
+    .put(authUser, isSeller, wrapAsync(products.editProduct))
+    .delete(authUser, isSeller, wrapAsync(products.deleteProduct));
 
 router.route('/:id')
-    .get(wrapAsync(async (req, res, next) => {
-        const { id } = req.params;
-        const product = await Product.findById(id).populate('reviews').populate('userId');
-        if (!product) {
-            hError("Error getting product!");
-            next(new exError(404,"Product not found!"));
-        } else {
-            res.render('store/show',{ title:"Store", product });
-        };
-    }))
-    .post(authUser, wrapAsync(async (req, res) => {
-        const { id } = req.params;
-        let dat = req.body;
-        dat.review.userId = req.user._id;
-        dat.review.created = Date.now();
-    
-        const vReview = reviewSchema.validate(dat);
-        if (vReview.error) {
-            hError("Review failed validation! DETAILS:\n"+vReview.error)
-            const msg = vReview.error.details.map(el => el.message).join(',')
-            
-            req.flash('failure','Unable to submit your review! Please try again. ERROR: '+msg);
-            req.flash('data',dat.review);
-            res.redirect(`/store/${id}`);
-        } else {
-            const product = await Product.findById(id);
-            const review = new Review(dat.review);
-    
-            product.reviews.unshift(review);
-            await review.save();
-            await product.save();
-            req.flash('success','Your review has been submitted!');
-            res.redirect(`/store/${id}`);
-        }
-    }));
+    .get(wrapAsync(products.showProduct))
+    .post(authUser, wrapAsync(products.postReview));
 
 router.route('/:id/:cid')
-    .get(authUser, isReviewer, wrapAsync(async (req, res) => {
-        const { id, cid } = req.params;
-        const product = await Product.findById(id);
-        const review = await Review.findById(cid);
-        res.render('store/cedit',{ title:"Edit review", product, review });
-    }))
-    .patch(authUser, isReviewer, wrapAsync(async (req, res) => {
-        const { id, cid } = req.params;
-        await Review.findByIdAndUpdate(cid, req.body, {runValidators: true});
-        req.flash('success','Review has been edited!');
-        res.redirect(`/store/${id}`);
-    }))
-    .delete(authUser, isReviewer, wrapAsync(async (req, res) => {
-        const { id, cid } = req.params;
-        await Product.findByIdAndUpdate(id,{$pull: {reviews: cid}});
-        await Review.findByIdAndDelete(cid);
-        req.flash('success','Review has been deleted!');
-        res.redirect(`/store/${id}`);
-    }));
+    .get(authUser, isReviewer, wrapAsync(products.editReviewForm))
+    .patch(authUser, isReviewer, wrapAsync(products.editReview))
+    .delete(authUser, isReviewer, wrapAsync(products.deleteReview));
 
 module.exports = router;

@@ -8,18 +8,6 @@ const productSchema = new Schema({
         type: String,
         required: true
     },
-    assetId: {
-        type: Number,
-        required: true
-    },
-    userAssetId: {
-        type: Number,
-        required: true
-    },
-    cookie: {
-        type: String,
-        required: true
-    },
     image: {
         type: String,
         required: true
@@ -28,10 +16,30 @@ const productSchema = new Schema({
         type: String,
         required: true
     },
+    rating: {
+        type: Number,
+        min: 1,
+        max: 5,
+        required: true,
+        default: 1
+    },
+    ratings: {
+        type: Number,
+        required: true,
+        default: 0
+    },
     price: {
         type: Number,
         required: true
     },
+    stock: {
+        type: Number,
+        required: true
+    },
+    reviews: [{
+        type: Schema.Types.ObjectId,
+        ref: 'reviews'
+    }],
     seller: {
         type: Schema.Types.ObjectId,
         ref: 'Users'

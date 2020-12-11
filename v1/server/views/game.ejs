@@ -1,0 +1,33 @@
+<%- layout('/layouts/boilerplate')%>
+<h1 class="mt-4">Total score:</h1>
+<div class="row justify-content-center text-center">
+    <ul class="list-group w-50 mt-4">
+        <i class="list-group-item"><span id="p1">Player 1<br/></span> <span id="p1Score">0</span></i>
+        <i class="list-group-item"><span id="p2">Player 2<br/></span> <span id="p2Score">0</span></i>
+    </ul>
+    <div class="input-group justify-content-center m-0 p-0 my-4">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="playTo">Max Score</label>
+        </div>
+        <select class="custom-select" name="" id="playTo">
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+        </select>
+    </div>
+</div>
+<button id="plr1" class="btn btn-success align-self-end col-3 mt-5 mb-5">Player 1</button>
+<button id="plr2" class="btn btn-primary align-self-end col-3 mt-5 mb-5">Player 2</button>
+<button id="reset" class="btn btn-danger align-self-end col-3 mt-5 mb-5">Reset</button>
+<nav class="col-12 mt-4" aria-label="breadcrumb">
+    <ol class="breadcrumb col-12 justify-content-center">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active"  aria-current="page">Game</li>
+    </ol>
+</nav>

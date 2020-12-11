@@ -1,41 +1,6 @@
-GET https://trades.rprxy.xyz/v1/trades/Inbound
+GET http://localhost:3000/store/5fa4e1977a4ead10e4dead37/edit
 Content-Type: application/json
 
 {
-  "User-Agent": 'Mozilla/5.0',
-  "Content-Type": 'text/javascript; charset=UTF-8',
-  "x-csrf-token": 'NE9yBtwFr2+M',
-  "cookie": '.ROBLOSECURITY=_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_BDA423C2FFB55701B17F2753DB966506C4F8E3311A4EEA07675DDBF2E9D1D5E6AFE1ACABE012D9BD820673D3FF3616B2BAD42E7CCA9F4AB1BF73C76DFF40FFC20A7B4F1D188DC8C9368C0F2E60BACE7FA5FCE50B7A9CA1F929482413FC6AA0D36ABFC22124DCB948E6E29D40E55E72B7AAC3844F436ED220B8BC0F9BF7294BA4B1D721560C7953E27AE087BAC81C5E0A1BC5674C82C48B3DA249C9A325FE60B21C8F99DA552A23D3FE614B3B1D81D1B44F46449525D4ED3D16F3F4168C926C711DAE54DA9C1E3F9269ED837E31769283885A57F99F954435D0448EE461B0E12308EA8F54BF4CEBE249FB5B7E5D104296B09C96C85F0F649ACB30265F652B2D2C70CD6A3650D5D499FDE30BC30F0EF9DC7095D1D21DA9453A9FE903F70AFB6704A42078A6;',
-  "offers": [
-    {
-      "user": {
-        "id": 0,
-        "name": "string",
-        "displayName": "string"
-      },
-      "userAssets": [
-        {
-          "id": 0,
-          "serialNumber": 0,
-          "assetId": 0,
-          "name": "string",
-          "recentAveragePrice": 0,
-          "originalPrice": 0,
-          "assetStock": 0,
-          "membershipType": "None"
-        }
-      ],
-      "robux": 0
-    }
-  ],
-  "id": 0,
-  "user": {
-    "id": 0,
-    "name": "string",
-    "displayName": "string"
-  },
-  "created": "2020-12-09T05:35:11.468Z",
-  "expiration": "2020-12-09T05:35:11.468Z",
-  "isActive": true,
-  "status": "Unknown"
+    "userId": 3
 }
