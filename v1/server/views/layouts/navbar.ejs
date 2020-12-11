@@ -2,7 +2,7 @@
     <nav class="col-12 navbar navbar-expand-md navbar-light bg-light rounded-top mb-1">
         <div class="container-fluid p-0">
             <!-- Navbar -->
-            <a class="navbar-brand" href="/">Brand name</a>
+            <a class="navbar-brand" href="/"><img id="navLogo" src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Roblox_logo.png" alt=""> RobloxTrade</a>
 
             <!-- Mobile dropdown -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -13,18 +13,21 @@
             <!-- Nav links -->
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <div class="navbar-nav">
-                    <a class="nav-link btn mr-1 <%= (title == "Home") ? 'border rounded' : ''%>" href="/">Home</a>
-                    <a class="nav-link btn mr-1 <%= (title == "Store") ? 'border rounded' : ''%>" href="/store">Store</a>
-                    <a class="nav-link btn mr-1 <%= (title == "Posts") ? 'border rounded' : ''%>" href="/post">Posts</a>
-                    <a class="nav-link btn mr-1 <%= (title == "Game") ? 'border rounded' : ''%>" href="/game">Game</a>
-                    <a class="nav-link btn mr-1 <%= (title == "Shows") ? 'border rounded' : ''%>" href="/shows">TV search</a>
+                    <a class="nav-link btn mr-1 <%= (title == "Home") ? 'border rounded' : ''%>" href="/listings">Listings</a>
+                    <a class="nav-link btn mr-1 <%= (title == "Support") ? 'border rounded' : ''%>" href="/support">Support</a>
+                    <a class="nav-link btn mr-1 <%= (title == "Orders") ? 'border rounded' : ''%>" href="/orders">Orders</a>
+                    <a class="nav-link btn mr-1 <%= (title == "Orders") ? 'border rounded' : ''%>" href="/inventory">Inventory lookup</a>
+                    <a class="nav-link btn mr-1 <%= (title == "Orders") ? 'border rounded' : ''%>" href="/trades">Trades lookup</a>
+                    
+                    <%if (typeof currentUser !== "undefined") {%>
+                        <a class="nav-link btn mx-1" href="/login">Settings</a>
+                    <% } else { %>
+                        <a class="nav-link btn mx-1" href="/login">Sign in</a>
+                    <% }; %> 
                 </div>
                 <div class="navbar-nav ml-auto">
-                    <%if (typeof currentUser !== "undefined") {%>
-                        <a class="nav-link btn" href="/logout">Sign out</a>
-                    <% } else { %> 
-                        <a class="nav-link btn btn-outline-secondary" href="/register">Sign Up</a>
-                        <a class="nav-link btn mx-1" href="/login">Sign in</a>
+                    <%if (typeof currentUser == "undefined") {%>
+                        <a class="nav-link btn btn-seller" href="/register">Become a seller</a>
                     <% }; %> 
                 </div>
             </div>

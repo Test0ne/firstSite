@@ -3,7 +3,7 @@
 
 <div class="col-md-12 col-lg-11 col-xl-10 mt-3">
     <h2 class="col-12 mb-3">Add product</h2>
-    <form class="row justify-content-center" action="/store/new?_method=PUT" method="POST">
+    <form class="row justify-content-center" action="/store/new?_method=PUT" method="POST" enctype="multipart/form-data">
         <div class="border rounded col-12 m-1 p-1 py-4">
             <label class="col-6 font-weight-bold" for="name">Product Name</label>
             <textarea class="col-md-6 col-sm-12 text-center" type="text" name="product[name]" id="name" placeholder="product name"><%= typeof data !== 'undefined' ? data.name : ''%></textarea>
@@ -15,7 +15,8 @@
             <input class="col-md-3 col-sm-5 text-center" type="number" id="stock" name="product[stock]" placeholder="0" value="<%= typeof data !== 'undefined' ? data.stock : ''%>">
             <hr class="w-md-50 w-sm-100">
             <label class="col-md-3 col-sm-5 font-weight-bold" for="image">Image</label>
-            <input class="col-md-3 col-sm-5 text-center" type="text" id="image" name="product[image]" placeholder="/img/product.png" value="<%= typeof data !== 'undefined' ? data.image : ''%>">
+            <input class="col-md-3 col-sm-5 text-center" type="file" id="image" name="product[image]" placeholder="/img/product.png" value="<%= typeof data !== 'undefined' ? data.image : ''%>">
+            <!-- <input class="col-md-3 col-sm-5 text-center" type="text" id="image" name="product[image]" placeholder="/img/product.png" value="<%= typeof data !== 'undefined' ? data.image : ''%>"> -->
             <label class="col-12" for="description">Description</label>
             <textarea class="col-md-10 col-sm-12 text-center" name="product[description]" id="description" cols="30" rows="10" class="col-12 text-center"><%= typeof data !== 'undefined' ? data.description : ''%></textarea>
         </div>

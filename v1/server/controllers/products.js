@@ -6,7 +6,6 @@ const { prSchema, reviewSchema } = require('../models/schemavs')
 //Import utils
 const { exError,hError,hDebug } = require('../../utils')
 
-
 //Models
 const Review = require('../models/reviews');
 const Product = require('../models/products');
@@ -36,16 +35,6 @@ module.exports.createProduct = async (req, res) => {
         res.redirect(`/store/${newp._id}`)
     }
 };
-module.exports.showProduct = async (req, res, next) => {
-    const { id } = req.params;
-    const product = await Product.findById(id).populate('reviews').populate('userId');
-    if (!product) {
-        hError("Error getting product!");
-        next(new exError(404,"Product not found!"));
-    } else {
-        res.render('store/show',{ title:"Store", product });
-    };
-};
 module.exports.editProductForm = async (req, res, next) => {
     const { id } = req.params;
     const product = await Product.findById(id);
@@ -63,6 +52,16 @@ module.exports.deleteProduct = async (req, res) => {
     const product = await Product.findByIdAndDelete(id);
     req.flash('success',`Product '${product.name}' has been deleted!`);
     res.redirect("/store");
+};
+module.exports.showProduct = async (req, res, next) => {
+    const { id } = req.params;
+    const product = await Product.findById(id).populate('reviews').populate('userId');
+    if (!product) {
+        hError("Error getting product!");
+        next(new exError(404,"Product not found!"));
+    } else {
+        res.render('store/show',{ title:"Store", product });
+    };
 };
 module.exports.postReview = async (req, res) => {
     const { id } = req.params;

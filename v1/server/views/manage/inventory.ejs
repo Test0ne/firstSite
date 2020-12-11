@@ -1,0 +1,42 @@
+<%- layout('/layouts/boilerplate')%>
+
+<div class="row col-12 align-content-center justify-content-center">
+    <h2 class="col-12 my-3">Inventory lookup</h2>
+    <form action="/inventory" id="userSearch" class="row justify-content-center w-75">
+        <label for="username_textbox"><b>Enter username</b></label>
+        <input type="text" name="username" id="username_textbox">
+        <button class="btn btn-primary my-2">Search</button>
+    </form>
+    <div id="icontainer" class="row justify-content-start mb-5">
+        <%if (typeof (inventory) != "undefined") {if (!inventory.data) {%>
+            <%=inventory%>
+        <%} else {for (let item of inventory.data) {console.dir(item);if (item) {%>
+            <div class="pCont col-xl-3 col-lg-6 col-md-6 col-sm-6 text-left p-1 text-center">
+                <div class="card border pContInner row p-2 m-0 h-100">
+                    <a class="aPcont m-0 p-0" href="#">
+                        <img src="https://www.roblox.com/asset-thumbnail/image?assetId=<%=item.assetId%>&width=420&height=420&format=png" class="img-thumbnail card-img-top border rounded">
+                    </a>
+                    <p class="col-12 card-title pLink m-0 p-0 mt-2"><%=item.name%></p>
+                    <div class="m-0 p-0">
+                        <b>Asset Type: </b>
+                        <p class="col-12 card-title pLink m-0 p-0 mt-2"><%=item.assetType%></p>
+                    </div>
+                    <div class="m-0 p-0">
+                        <b>Asset ID: </b>
+                        <p class="col-12 card-title pLink m-0 p-0 mt-2"><%=item.assetId%></p>
+                    </div>
+                    <div class="m-0 p-0">
+                        <b>Rolimon Price: </b>
+                        <p class="col-12 card-title pLink m-0 p-0 mt-2"><%=item.price%></p>
+                    </div>
+                </div>
+            </div>
+        <%}}}}%>
+    </div>
+</div>
+<nav class="col-12" aria-label="breadcrumb">
+    <ol class="breadcrumb col-12 justify-content-center">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active"  aria-current="page">Store</li>
+    </ol>
+</nav>

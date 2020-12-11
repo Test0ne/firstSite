@@ -1,41 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="/img/favico.png" />
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" href="/img/favico.png" />
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css" integrity="sha384-DhY6onE6f3zzKbjUPRc2hOzGAdEf4/Dz+WJwBvEYL/lkkIsI3ihufq9hk9K4lVoK" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/stars.css">
-    <link rel="stylesheet" href="/css/app.css">
-    <title><%=title%> - SudoStudios</title>
-</head>
-<body class="m-3 p-0">
-    <section id="page">
-        <%- include('navbar')%>
-        <section class="row m-0">
-            <div id="overMessages"></div>
-            <%- include('unav')%>
-            <div class="mcontent col-md-10 col-lg-10 col-xl-10 text-center bg-white m-0 row justify-content-center">
-            <%- include('ui/alert')%>
-            <%- body -%>
-            </div>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css" integrity="sha384-DhY6onE6f3zzKbjUPRc2hOzGAdEf4/Dz+WJwBvEYL/lkkIsI3ihufq9hk9K4lVoK" crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/stars.css">
+        <link rel="stylesheet" href="/css/app.css">
+        <title><%=title%> - SudoStudios</title>
+    </head>
+    <body class="h-100 m-0 p-0">
+        <section class="main-content m-0 p-0" id="page">
+            <%- include('navbar')%>
+            <section class="row m-0">
+                <div id="overMessages"></div>
+                <!-- <%- include('unav')%> -->
+                <div class="mcontent text-center bg-white m-0 row justify-content-center">
+                <%- include('ui/alert')%>
+                <%- body -%>
+                </div>
+            </section>
+            <footer>
+                <div class="flex-column justify-content-center container-fluid text-center pt-5 pb-auto h-100 px-0 mx-0 my-auto">
+                    <a class="p-1 m-0" href="/about">About</a>
+                    <a class="p-1 m-0" href="https://google.com">Contact us</a>
+                    <p class="font-weight-light">Under construction</p>
+                </div>
+            </footer>
         </section>
-        <footer class="row m-0 mt-1">
-            <div class="container-fluid bg-white text-center pt-3 pb-2 rounded-bottom">
-                <a class="p-1" href="/about">About</a>
-                <a class="p-1" href="https://google.com">Contact me</a>
-            </div>
-        </footer>
-    </section>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/js/bootstrap.min.js" integrity="sha384-5h4UG+6GOuV9qXh6HqOLwZMY4mnLPraeTrjT5v07o347pj6IkfuoASuGBhfDsp3d" crossorigin="anonymous"></script>
-    <script src="/js/modular.js"></script>
-    <%  if (title == "Home") {  %> 
-    <script src="/js/btcXHR.js"></script>
-    <%  };if (title == "Game") {  %> 
-    <script src="/js/game.js"></script>
-    <%  }%> 
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-</body>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/js/bootstrap.min.js" integrity="sha384-5h4UG+6GOuV9qXh6HqOLwZMY4mnLPraeTrjT5v07o347pj6IkfuoASuGBhfDsp3d" crossorigin="anonymous"></script>
+        <script src="/js/modular.js"></script>
+        <%  if (title == "Home") {  %> 
+            <script src="/js/btcXHR.js"></script>
+        <%  };if (title == "placeholder") {  %> 
+            <script src="/js/1.js"></script>
+        <%  };if (title == "placeholder") {  %> 
+            <script src="/js/2.js"></script>
+        <%  };if (title == "placeholder") {  %> 
+            <script src="/js/3.js"></script>
+        <%  };if (title == "placeholder") {  %> 
+            <script src="/js/4.js"></script>
+        <%  }%> 
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </body>
 </html>
